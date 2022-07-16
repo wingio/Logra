@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId = "xyz.wingio.logra"
-        minSdk = 21
+        minSdk = 23
         targetSdk = 32
         versionCode = 1310
         versionName = "ALPHA - 1.10"
@@ -88,4 +88,8 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
     androidTestImplementation("androidx.compose.ui:ui-test-junit4:$composeVersion")
     debugImplementation ("androidx.compose.ui:ui-tooling:$composeVersion")
+
+    val shizuku_version = "12.1.0"
+    implementation("dev.rikka.shizuku:api:$shizuku_version")
+    implementation("dev.rikka.shizuku:provider:$shizuku_version")
 }
