@@ -10,7 +10,9 @@ import kotlin.reflect.KProperty
 abstract class BasePreferenceManager(
     private val prefs: SharedPreferences
 ) {
-    protected fun getString(key: String, defaultValue: String?) = prefs.getString(key, defaultValue)!!
+    protected fun getString(key: String, defaultValue: String?) =
+        prefs.getString(key, defaultValue)!!
+
     private fun getBoolean(key: String, defaultValue: Boolean) = prefs.getBoolean(key, defaultValue)
     private fun getInt(key: String, defaultValue: Int) = prefs.getInt(key, defaultValue)
     private fun getFloat(key: String, defaultValue: Float) = prefs.getFloat(key, defaultValue)
@@ -21,7 +23,8 @@ abstract class BasePreferenceManager(
     private fun putBoolean(key: String, value: Boolean) = prefs.edit { putBoolean(key, value) }
     private fun putInt(key: String, value: Int) = prefs.edit { putInt(key, value) }
     private fun putFloat(key: String, value: Float) = prefs.edit { putFloat(key, value) }
-    protected inline fun <reified E : Enum<E>> putEnum(key: String, value: E) = putString(key, value.name)
+    protected inline fun <reified E : Enum<E>> putEnum(key: String, value: E) =
+        putString(key, value.name)
 
     protected class Preference<T>(
         private val key: String,

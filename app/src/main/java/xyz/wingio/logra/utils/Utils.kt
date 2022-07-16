@@ -16,7 +16,7 @@ import java.util.*
 import java.util.concurrent.Executors
 
 
-object Utils: KoinComponent {
+object Utils : KoinComponent {
 
     private val prefs: PreferenceManager by inject()
 
@@ -29,7 +29,7 @@ object Utils: KoinComponent {
     }
 
     suspend fun checkRoot() = coroutineScope {
-        if(prefs.hasRoot) return@coroutineScope true
+        if (prefs.hasRoot) return@coroutineScope true
         try {
             val pBuilder = ProcessBuilder("su")
             val proc = withContext(Dispatchers.IO) { pBuilder.start() }
@@ -69,7 +69,9 @@ object Utils: KoinComponent {
             proc.destroy()
 
             result
-        } catch (th: Throwable) { false }
+        } catch (th: Throwable) {
+            false
+        }
     }
 
     context(Context)

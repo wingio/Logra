@@ -17,13 +17,14 @@ object LogcatManager {
     fun listen(callback: (LogcatEntry) -> Unit) {
         thread(start = true) {
             val reader = currentStr.bufferedReader()
-            while (reader.readLine().isNotEmpty()) {
+            while (reader.readLine() != null && reader.readLine().isNotEmpty()) {
                 val line = reader.readLine()
                 line.split("\n").forEach {
                     try {
                         val ent = LogcatEntry.fromLine(it)
                         ent?.let(callback)
-                    } catch (th: Throwable) {}
+                    } catch (th: Throwable) {
+                    }
                 }
             }
         }

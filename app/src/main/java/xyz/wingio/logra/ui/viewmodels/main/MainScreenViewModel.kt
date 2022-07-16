@@ -4,10 +4,12 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import xyz.wingio.logra.domain.logcat.LogcatEntry
+import xyz.wingio.logra.domain.manager.PreferenceManager
 import xyz.wingio.logra.utils.logcat.LogcatManager
-import kotlin.concurrent.thread
 
-class MainScreenViewModel: ViewModel() {
+class MainScreenViewModel(
+    val prefs: PreferenceManager
+) : ViewModel() {
 
     val logs = mutableStateListOf<LogcatEntry>()
     private val pausedLogs = mutableListOf<LogcatEntry>()
@@ -16,7 +18,7 @@ class MainScreenViewModel: ViewModel() {
 
     init {
         LogcatManager.listen {
-            if(paused.value)
+            if (paused.value)
                 pausedLogs.add(it)
             else {
                 logs.addAll(pausedLogs)

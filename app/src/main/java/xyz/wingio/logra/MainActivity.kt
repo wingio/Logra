@@ -8,7 +8,7 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.SideEffect
 import cafe.adriel.voyager.navigator.Navigator
-import cafe.adriel.voyager.transitions.FadeTransition
+import cafe.adriel.voyager.transitions.SlideTransition
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.runBlocking
 import org.koin.android.ext.android.inject
@@ -51,7 +51,7 @@ class MainActivity : ComponentActivity() {
                 }
 
                 Navigator(screen = MainScreen()) {
-                    FadeTransition(it)
+                    SlideTransition(it)
                 }
 
             }

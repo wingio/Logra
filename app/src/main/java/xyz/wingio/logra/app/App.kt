@@ -6,7 +6,7 @@ import org.koin.core.context.startKoin
 import xyz.wingio.logra.di.managerModule
 import xyz.wingio.logra.di.viewModelModule
 
-class App: Application() {
+class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
