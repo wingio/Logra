@@ -1,19 +1,15 @@
 package xyz.wingio.logra.utils
 
+import android.Manifest
 import android.app.ActivityManager
-import android.app.Application
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
-import android.content.pm.PermissionInfo
-import android.os.Build
-import android.os.IBinder
-import moe.shizuku.server.IShizukuApplication
+import android.os.Parcel
+import moe.shizuku.server.IShizukuService
 import rikka.shizuku.Shizuku
-import rikka.shizuku.ShizukuBinderWrapper
-import rikka.shizuku.SystemServiceHelper
+import rikka.shizuku.ShizukuRemoteProcess
 import xyz.wingio.logra.BuildConfig
 import java.lang.reflect.Method
-import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -28,8 +24,8 @@ val getCurrentUserMethod: Method =
 lateinit var shizukuPermissionCallback: (Int, Int) -> Unit
 
 suspend fun checkShizukuPermission() = suspendCoroutine<Boolean> {
-    if (Shizuku.isPreV11()) {
-        // Pre-v11 is unsupported
+    if (!Shizuku.pingBinder() || Shizuku.isPreV11()) {
+        // Pre-v11 is unsupported, and no bider means the shizuku service isn't running
         it.resume(false)
     }
 
@@ -54,48 +50,10 @@ suspend fun checkShizukuPermission() = suspendCoroutine<Boolean> {
     }
 }
 
-fun grantPermissionWithShizuku() {
-    // Uses reflection to access hidden apis and grant app READ_LOGS via IPackageManager (SDK_INT < 30) or IPermissionManager (SDK_INT >= 30)
-    val instance = if (Build.VERSION.SDK_INT < 30) {
-        // Obtain IPackageManager instance
-        Class.forName("android.content.pm.IPackageManager\$Stub") // IPackageManager.Stub.asInterface
-            .getMethod(
-                "asInterface",
-                IBinder::class.java
-            ).invoke(
-                null,
-                ShizukuBinderWrapper(
-                    SystemServiceHelper.getSystemService("package")
-                )
-            )
-    } else {
-        // SDK Level 30 and above use IPermissionManager instead
-        // Obtain IPermissionManager instance
-        Class.forName("android.permission.IPermissionManager\$Stub") // IPermissionManager.Stub.asInterface
-            .getMethod(
-                "asInterface",
-                IBinder::class.java
-            ).invoke(
-                null,
-                ShizukuBinderWrapper(
-                    SystemServiceHelper.getSystemService("permissionmgr")
-                )
-            )
-    }
-    // Obtain grantRuntimePermission(String packageName, String permissionName, int userId) method
-    val grantRuntimePermissionMethod = Class.forName("android.permission.IPermissionManager")
-        .getMethod(
-            "grantRuntimePermission",
-            String::class.java /* package name */,
-            String::class.java /* permission name */,
-            Int::class.java /* user ID */
-        )
-
-    // Use hidden api to grant app READ_LOGS permission
-    grantRuntimePermissionMethod.invoke(
-        instance,
-        BuildConfig.APPLICATION_ID,
-        android.Manifest.permission.READ_LOGS,
-        getCurrentUserMethod.invoke(null)
-    )
+fun grantPermissionWithShizuku(): Boolean {
+    if (!Shizuku.pingBinder()) return false
+    val command = arrayOf("pm", "grant", BuildConfig.APPLICATION_ID, Manifest.permission.READ_LOGS)
+    val process = Shizuku.newProcess(command, null, null)
+    val result = process.waitFor()
+    return result == 0
 }

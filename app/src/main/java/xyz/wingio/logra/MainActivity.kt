@@ -15,6 +15,8 @@ import cafe.adriel.voyager.transitions.SlideTransition
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.runBlocking
 import org.koin.android.ext.android.inject
+import rikka.shizuku.Shizuku
+import rikka.shizuku.ShizukuRemoteProcess
 import xyz.wingio.logra.domain.manager.PreferenceManager
 import xyz.wingio.logra.ui.screens.main.MainScreen
 import xyz.wingio.logra.ui.theme.LograTheme
@@ -43,8 +45,8 @@ class MainActivity : ComponentActivity() {
             shizukuLogger.debug("Shizuku perms granted: $shizukuGranted")
             if (shizukuGranted) {
                 shizukuLogger.debug("Attempting to use shizuku to grant permissions")
-                grantPermissionWithShizuku()
-                shizukuLogger.debug("Perm now granted: ${ContextCompat.checkSelfPermission(applicationContext, Manifest.permission.READ_LOGS)}")
+                val granted = grantPermissionWithShizuku()
+                shizukuLogger.debug("Perm now granted: $granted")
             }
         }
 
