@@ -9,7 +9,6 @@ import rikka.shizuku.Shizuku
 import xyz.wingio.logra.BuildConfig
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
-import kotlin.random.Random
 
 // Must be a callback because the Shizuku permission request callback is run on the main thread,
 // and can't be called if the main thread is blocked
@@ -60,8 +59,7 @@ suspend fun grantPermissionsWithShizuku() = withContext(Dispatchers.IO) {
                 " && exit\n").toByteArray()
     )
     process.outputStream.flush()
-    val result = process.waitFor()
-    return@withContext result == 0
+    process.waitFor()
 }
 
 enum class ShizukuRequestResult {
