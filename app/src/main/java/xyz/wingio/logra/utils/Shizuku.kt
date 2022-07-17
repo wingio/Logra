@@ -6,37 +6,40 @@ import rikka.shizuku.Shizuku
 import xyz.wingio.logra.BuildConfig
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
-
-// Random code to pass to Shizuku
-const val PERMISSION_REQUEST_CODE = 4652
+import kotlin.random.Random
 
 // Must be a callback because the Shizuku permission request callback is run on the main thread,
 // and can't be called if the main thread is blocked
-suspend fun checkShizukuPermission() = suspendCoroutine<Boolean> {
-    if (!Shizuku.pingBinder() || Shizuku.isPreV11()) {
-        // Pre-v11 is unsupported, and no binder means the Shizuku service isn't running
-        it.resume(false)
+suspend fun checkShizukuPermission() = suspendCoroutine<ShizukuRequestResult> {
+    if (!Shizuku.pingBinder()) {
+        it.resume(ShizukuRequestResult.NOT_RUNNING)
+        return@suspendCoroutine
+    }
+    if (Shizuku.isPreV11()) {
+        it.resume(ShizukuRequestResult.PRE_V11)
         return@suspendCoroutine
     }
 
     if (Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED) {
         // Granted
-        it.resume(true)
+        it.resume(ShizukuRequestResult.GRANTED)
     } else if (Shizuku.shouldShowRequestPermissionRationale()) {
         // Users choose "Deny and don't ask again"
-        it.resume(false)
+        it.resume(ShizukuRequestResult.DENIED)
     } else {
+        // Obtain a random permission request code
+        val shizukuRequestCode = (0..9).shuffled().joinToString("").toInt()
         // Set a listener for the permission grant/deny
-        lateinit var permissionResultListener: (Int, Int) -> Unit
-        permissionResultListener = permissionResultListener@ { requestCode, grantResult ->
-            if (requestCode != PERMISSION_REQUEST_CODE) return@permissionResultListener
+        Shizuku.addRequestPermissionResultListener { requestCode, grantResult ->
+            if (requestCode != shizukuRequestCode) return@addRequestPermissionResultListener
             Logger("dn").debug(grantResult.toString())
-            it.resume(grantResult == PackageManager.PERMISSION_GRANTED)
-            Shizuku.removeRequestPermissionResultListener(permissionResultListener)
+            it.resume(
+                if (grantResult == PackageManager.PERMISSION_GRANTED) ShizukuRequestResult.GRANTED
+                else ShizukuRequestResult.DENIED
+            )
         }
-        Shizuku.addRequestPermissionResultListener(permissionResultListener)
         // Request the permission
-        Shizuku.requestPermission(PERMISSION_REQUEST_CODE)
+        Shizuku.requestPermission(shizukuRequestCode)
     }
 }
 
@@ -47,4 +50,11 @@ fun grantPermissionsWithShizuku(): Boolean {
     val process = Shizuku.newProcess(command, null, null)
     val result = process.waitFor()
     return result == 0
+}
+
+enum class ShizukuRequestResult {
+    GRANTED,
+    DENIED,
+    PRE_V11,
+    NOT_RUNNING
 }

@@ -3,7 +3,6 @@ package xyz.wingio.logra
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -15,7 +14,7 @@ import androidx.core.content.ContextCompat
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.transitions.SlideTransition
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import xyz.wingio.logra.ui.components.PermissionPopup
+import xyz.wingio.logra.ui.components.permission.PermissionPopup
 import xyz.wingio.logra.ui.screens.main.MainScreen
 import xyz.wingio.logra.ui.theme.LograTheme
 import xyz.wingio.logra.utils.logcat.LogcatManager
