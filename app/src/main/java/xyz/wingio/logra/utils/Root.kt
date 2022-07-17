@@ -11,7 +11,7 @@ import xyz.wingio.logra.BuildConfig
 suspend fun grantPermissionsWithRoot() = withContext(Dispatchers.IO) {
     val process = Runtime
         .getRuntime()
-        .exec("su -c 'pm grant ${BuildConfig.APPLICATION_ID} ${Manifest.permission.READ_LOGS}'")
+        .exec("su -c pm grant ${BuildConfig.APPLICATION_ID} ${Manifest.permission.READ_LOGS}")
         .apply { waitFor() }
 
     if (process.exitValue() != 0) {
