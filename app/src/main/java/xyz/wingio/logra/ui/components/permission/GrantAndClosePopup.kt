@@ -17,7 +17,7 @@ fun GrantAndClosePopup(grantMethod: GrantMethod, onDialogChange: (PopupState) ->
     AlertDialog(
         text = {
             Text(
-                text = "Once granted, the app will close. Press the button below to grant the permission and restart the app.",
+                text = "Once granted, the app will restart. Press the button below to grant the permission and restart the app.",
                 style = MaterialTheme.typography.bodyMedium
             )
         },

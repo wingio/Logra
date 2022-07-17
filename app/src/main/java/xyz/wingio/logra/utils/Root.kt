@@ -8,24 +8,12 @@ import java.io.File
 import java.io.IOException
 
 /**
- * Checks if the phone has granted the app root access
- */
-suspend fun checkRootPermission() = withContext(Dispatchers.IO) {
-    try {
-        val process = Runtime.getRuntime().exec("su -c 'echo'")
-        val exitCode = process.waitFor()
-        exitCode == 0
-    } catch (e: IOException) {
-        e.printStackTrace()
-        false
-    }
-}
-
-/**
  * Uses root to grant the app [Manifest.permission.READ_LOGS] permission.
  */
 suspend fun grantPermissionsWithRoot() = withContext(Dispatchers.IO) {
-    val process = Runtime.getRuntime().exec("su -c 'pm grant ${BuildConfig.APPLICATION_ID} ${Manifest.permission.READ_LOGS}'")
+    val process = Runtime.getRuntime().exec(
+        "su -c 'pm grant ${BuildConfig.APPLICATION_ID} ${Manifest.permission.READ_LOGS} && am force-stop ${BuildConfig.APPLICATION_ID} && am start -n ${BuildConfig.APPLICATION_ID}/${BuildConfig.APPLICATION_ID}.MainActivity'"
+    )
     val exitCode = process.waitFor()
     return@withContext exitCode == 0
 }

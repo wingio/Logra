@@ -72,12 +72,7 @@ fun RequestPopup(onDialogChange: (PopupState) -> Unit) {
                 onClick = {
                     // Root
                     coroutineScope.launch {
-                        val grantedRoot = checkRootPermission()
-                        if (!grantedRoot) with(context) {
-                            Utils.showToast("Error granting permission with root, please try again.")
-                        } else {
-                            onDialogChange(PopupState.ROOT)
-                        }
+                        onDialogChange(PopupState.ROOT)
                     }
                 },
                 content = {
@@ -97,6 +92,7 @@ fun RequestPopup(onDialogChange: (PopupState) -> Unit) {
                                 ShizukuRequestResult.DENIED -> Utils.showToast("Shizuku permission must be accepted in order to use it.")
                                 ShizukuRequestResult.PRE_V11 -> Utils.showToast("Your Shizuku is outdated, please update it.")
                                 ShizukuRequestResult.NOT_RUNNING -> Utils.showToast("Shizuku service does not seem to be running, please start it first.")
+                                ShizukuRequestResult.OUTDATED_SDK -> Utils.showToast("Shizuku method is only available on android 6 and later.")
                             }
                         }
                     }
