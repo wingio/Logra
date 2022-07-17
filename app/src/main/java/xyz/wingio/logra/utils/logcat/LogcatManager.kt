@@ -7,7 +7,7 @@ import kotlin.concurrent.thread
 
 object LogcatManager {
 
-    private const val command = "logcat"
+    private const val command = "logcat -v epoch"
 
     private lateinit var reader: BufferedReader
     private lateinit var proc: Process

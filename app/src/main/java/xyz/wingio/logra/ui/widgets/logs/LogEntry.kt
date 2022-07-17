@@ -12,11 +12,15 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import org.koin.androidx.compose.get
 import xyz.wingio.logra.domain.logcat.LogcatEntry
 import xyz.wingio.logra.domain.manager.PreferenceManager
+import java.text.SimpleDateFormat
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -65,6 +69,12 @@ fun LogEntry(
                         text = log.content,
                         style = MaterialTheme.typography.labelMedium,
                         softWrap = prefs.lineWrap
+                    )
+                    Text(
+                        text = SimpleDateFormat("h:mm:ssa").format(log.createdAt),
+                        style = MaterialTheme.typography.labelSmall.copy(fontStyle = FontStyle.Italic, fontSize = 10.sp, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
+                        modifier = Modifier.fillMaxWidth(),
+                        textAlign = TextAlign.End
                     )
                 }
             }

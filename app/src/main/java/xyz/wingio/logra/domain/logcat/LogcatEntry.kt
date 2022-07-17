@@ -1,5 +1,14 @@
 package xyz.wingio.logra.domain.logcat
 
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.surfaceColorAtElevation
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.unit.dp
 import xyz.wingio.logra.utils.Utils.cleanLine
 import java.text.SimpleDateFormat
 import java.util.*
@@ -14,10 +23,31 @@ data class LogcatEntry(
     val raw: String
 ) {
 
+    val annotated: AnnotatedString
+    @Composable get() = buildAnnotatedString {
+        withStyle(
+            style = SpanStyle(
+                color = MaterialTheme.colorScheme.onBackground,
+                background = level.color.copy(0.4f)
+            )
+        ) {
+            append(" ${level.name[0]} ")
+        }
+        withStyle(
+            style = SpanStyle(
+                fontWeight = FontWeight.ExtraBold,
+                background = MaterialTheme.colorScheme.surfaceColorAtElevation(4.dp)
+            )
+        ) {
+            append(SimpleDateFormat(" h:mm:ssa ").format(createdAt))
+        }
+        append(" $pid $tag: $content")
+    }
+
     companion object {
 
         private val logcatRegex = Pattern.compile(
-            "^(\\d{0,2}-\\d{0,2}) *(\\d{0,2}:\\d{0,2}:\\d{0,2}\\.\\d+?) *([\\d]+) *[\\d]+ *([VDIWEFS]) *([\\d\\D]*?) *: *([\\d\\D]*)\$",
+            "^ *(\\d+)\\.(\\d{1,3}) *([\\d]+) *[\\d]+ *([VDIWEFS]) *([\\d\\D]*?) *: *([\\d\\D]*)\$",
             Pattern.MULTILINE
         )
 
@@ -27,15 +57,15 @@ data class LogcatEntry(
 
             if (!parsed.find()) return@with null
 
-            val date = parsed.group(1)
-            val time = parsed.group(2)
+            val secs = parsed.group(1)
+            val millis = parsed.group(2)
             val level = parsed.group(4)
             val tag = parsed.group(5)
             val pid = parsed.group(3)
             val content = parsed.group(6)
 
             LogcatEntry(
-                createdAt = SimpleDateFormat("MM-dd hh:mm:ss.S", Locale.US).parse("$date $time")!!,
+                createdAt = Date("$secs$millis".toLong()),
                 pid = pid?.toInt() ?: 0,
                 level = LogLevel.values().first { it.name.startsWith(level ?: "S") },
                 tag = tag?.trim() ?: "",

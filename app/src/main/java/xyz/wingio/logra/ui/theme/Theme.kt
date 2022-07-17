@@ -68,7 +68,7 @@ private val DarkColorPalette = lightColorScheme(
 )
 
 val ColorScheme.logLineAlt: Color
-    get() = Color(0xFF888888)
+    get() = onSurface.copy( alpha = 0.7f )
 
 @Composable
 fun LograTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {

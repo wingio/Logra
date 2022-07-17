@@ -27,6 +27,7 @@ import xyz.wingio.logra.ui.screens.settings.SettingsScreen
 import xyz.wingio.logra.ui.theme.logLineAlt
 import xyz.wingio.logra.ui.viewmodels.main.MainScreenViewModel
 import xyz.wingio.logra.ui.widgets.logs.LogEntry
+import java.text.SimpleDateFormat
 
 class MainScreen : Screen, KoinComponent {
 
@@ -77,7 +78,7 @@ class MainScreen : Screen, KoinComponent {
                     ) { i, it ->
                         if (viewModel.prefs.compact)
                             Text(
-                                it.raw,
+                                text = it.annotated,
                                 style = MaterialTheme.typography.labelSmall.copy(
                                     color = if (i % 2 == 0)
                                         MaterialTheme.colorScheme.logLineAlt else MaterialTheme.typography.labelSmall.color
