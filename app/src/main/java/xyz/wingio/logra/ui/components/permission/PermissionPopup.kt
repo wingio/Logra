@@ -12,19 +12,13 @@ fun PermissionPopup() {
 
     when (state) {
         PopupState.REQUEST -> RequestPopup { state = it }
-        PopupState.ROOT -> GrantAndClosePopup(
-            grantMethod = GrantMethod.ROOT
-        ) { state = it }
-        PopupState.SHIZUKU -> GrantAndClosePopup(
-            grantMethod = GrantMethod.SHIZUKU
-        ) { state = it }
+        PopupState.SHIZUKU -> GrantAndClosePopup { state = it }
         PopupState.NONE -> Unit
     }
 }
 
 enum class PopupState {
     REQUEST,
-    ROOT,
     SHIZUKU,
     NONE
 }

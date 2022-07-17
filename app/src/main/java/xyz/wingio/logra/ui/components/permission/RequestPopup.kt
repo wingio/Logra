@@ -15,6 +15,7 @@ import androidx.compose.ui.text.font.FontFamily
 import kotlinx.coroutines.launch
 import xyz.wingio.logra.BuildConfig
 import xyz.wingio.logra.utils.*
+import xyz.wingio.logra.utils.logcat.LogcatManager
 
 @OptIn(ExperimentalTextApi::class)
 @Composable
@@ -72,7 +73,10 @@ fun RequestPopup(onDialogChange: (PopupState) -> Unit) {
                 onClick = {
                     // Root
                     coroutineScope.launch {
-                        onDialogChange(PopupState.ROOT)
+                        grantPermissionsWithRoot().also {
+                            LogcatManager.connect()
+                            onDialogChange(PopupState.NONE)
+                        }
                     }
                 },
                 content = {

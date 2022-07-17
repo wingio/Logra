@@ -7,12 +7,10 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import kotlinx.coroutines.launch
-import xyz.wingio.logra.utils.grantPermissionsWithRoot
 import xyz.wingio.logra.utils.grantPermissionsWithShizuku
-import xyz.wingio.logra.utils.logcat.LogcatManager
 
 @Composable
-fun GrantAndClosePopup(grantMethod: GrantMethod, onDialogChange: (PopupState) -> Unit) {
+fun GrantAndClosePopup(onDialogChange: (PopupState) -> Unit) {
     val coroutineScope = rememberCoroutineScope()
 
     AlertDialog(
@@ -26,13 +24,7 @@ fun GrantAndClosePopup(grantMethod: GrantMethod, onDialogChange: (PopupState) ->
             TextButton(
                 onClick = {
                     coroutineScope.launch {
-                        when (grantMethod) {
-                            GrantMethod.ROOT -> grantPermissionsWithRoot().also {
-                                LogcatManager.connect()
-                                onDialogChange(PopupState.NONE)
-                            }
-                            GrantMethod.SHIZUKU -> grantPermissionsWithShizuku()
-                        }
+                        grantPermissionsWithShizuku()
                     }
                 },
                 content = {
