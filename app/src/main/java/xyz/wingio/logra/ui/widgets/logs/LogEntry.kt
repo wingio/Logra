@@ -7,9 +7,11 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawWithCache
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import org.koin.androidx.compose.get
@@ -26,6 +28,15 @@ fun LogEntry(
         Box(
             modifier = Modifier
                 .fillMaxSize()
+                .drawWithCache {
+                    onDrawBehind {
+                        drawRect(
+                            color = log.level.color,
+                            topLeft = Offset.Zero,
+                            size = Size(12f, size.height),
+                        )
+                    }
+                }
         ) {
             Box(
                 modifier = Modifier
@@ -57,13 +68,6 @@ fun LogEntry(
                     )
                 }
             }
-            Box(
-                modifier = Modifier
-                    .background(log.level.color)
-                    .height(3.dp)
-                    .fillMaxWidth()
-                    .align(Alignment.BottomCenter)
-            )
         }
     }
 }
