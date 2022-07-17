@@ -6,8 +6,6 @@ import xyz.wingio.logra.domain.manager.base.BasePreferenceManager
 class PreferenceManager(context: Context) :
     BasePreferenceManager(context.getSharedPreferences("prefs", Context.MODE_PRIVATE)) {
 
-    var hasRoot by booleanPreference("has_elev_access", false)
-
     var compact by booleanPreference("compact_mode", false)
 
     var lineWrap by booleanPreference("line_wrap", true)
