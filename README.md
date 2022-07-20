@@ -37,6 +37,6 @@ See [build-debug](https://github.com/wingio/Logra/blob/main/.github/workflows/bu
 
 License
 ---
-Aperii is licensed under the GNU General Public License v2.0
+Logra is licensed under the GNU General Public License v2.0
 
 [![License: GPLv2](https://img.shields.io/badge/License-GPL%20v2-blue.svg?style=for-the-badge)](https://github.com/wingio/Logra/blob/main/LICENSE)
