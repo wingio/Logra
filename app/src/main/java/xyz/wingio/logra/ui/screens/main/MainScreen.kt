@@ -1,10 +1,15 @@
 package xyz.wingio.logra.ui.screens.main
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.interaction.DragInteraction
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.MoreVert
@@ -49,7 +54,8 @@ class MainScreen : Screen, KoinComponent {
 
         Scaffold(
             modifier = Modifier.fillMaxSize(),
-            topBar = { Toolbar(viewModel, listState) }
+            topBar = { Toolbar(viewModel) },
+            floatingActionButton = { JumpFAB(viewModel, listState) }
         ) { pad ->
 
             LaunchedEffect(viewModel.logs.size) {
@@ -97,11 +103,38 @@ class MainScreen : Screen, KoinComponent {
     }
 
     @Composable
-    private fun Toolbar(
+    @OptIn(ExperimentalAnimationApi::class)
+    private fun JumpFAB(
         viewModel: MainScreenViewModel,
         listState: LazyListState
     ) {
         val scope = rememberCoroutineScope()
+        AnimatedVisibility(
+            visible = viewModel.freeScroll.value,
+            enter = scaleIn(),
+            exit = scaleOut()
+        ) {
+            SmallFloatingActionButton(
+                onClick = {
+                    viewModel.freeScroll.value = false
+                    scope.launch {
+                        if (viewModel.logs.size > 0) listState.animateScrollToItem(viewModel.logs.lastIndex)
+                    }
+                },
+                shape = RoundedCornerShape(8.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.KeyboardArrowDown,
+                    contentDescription = "Jump to bottom"
+                )
+            }
+        }
+    }
+
+    @Composable
+    private fun Toolbar(
+        viewModel: MainScreenViewModel
+    ) {
         val navigator = LocalNavigator.current
         var menuOpened by remember {
             mutableStateOf(false)
@@ -121,21 +154,6 @@ class MainScreen : Screen, KoinComponent {
                             painterResource(R.drawable.ic_pause_24),
                             contentDescription = "Pause logs"
                         )
-                }
-
-                // Toggle autoscrolling
-                IconButton(onClick = {
-                    viewModel.freeScroll.value = !viewModel.freeScroll.value
-                    if (!viewModel.freeScroll.value) {
-                        scope.launch {
-                            if (viewModel.logs.size > 0) listState.animateScrollToItem(viewModel.logs.lastIndex)
-                        }
-                    }
-                }) {
-                    Icon(
-                        imageVector = Icons.Filled.KeyboardArrowDown,
-                        contentDescription = "Toggle free scrolling"
-                    )
                 }
 
                 // Open dropdown menu
