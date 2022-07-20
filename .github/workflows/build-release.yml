@@ -6,11 +6,15 @@ on:
       versionName:
         required: true
         description: This releases version name
-        default: "ALPHA - 1.00"
+        default: "ALPHA - 1.20"
       versionCode:
         required: true
         description: This releases version code
-        default: "1300"
+        default: "1320"
+      preRelease:
+        description: 'Mark as pre-release'
+        required: true
+        type: boolean
       description:
         required: false
         description: Description of this release
@@ -48,8 +52,9 @@ jobs:
           git tag "$tag"
           git push origin "$tag"
           gh release create "$tag" \
-            --title "v${{ github.event.inputs.versionName }}" \
+            --title "${{ github.event.inputs.versionName }}" \
             --notes "${{ github.event.inputs.description }}" \
             app/build/outputs/apk/release/app-release.apk
+          if [${{github.event.inputs.preRelease}} == true]; then gh release edit "$tag" -p; fi
         env:
           GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'

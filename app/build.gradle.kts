@@ -11,8 +11,8 @@ android {
         applicationId = "xyz.wingio.logra"
         minSdk = 21
         targetSdk = 32
-        versionCode = 1310
-        versionName = "ALPHA - 1.10"
+        versionCode = 1320
+        versionName = "ALPHA - 1.20"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
