@@ -45,7 +45,7 @@ abstract class BasePreferenceManager(
 
     protected fun stringPreference(
         key: String,
-        defaultValue: String?
+        defaultValue: String = ""
     ) = Preference(
         key = key,
         defaultValue = defaultValue,

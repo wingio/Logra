@@ -9,6 +9,8 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import org.koin.androidx.compose.get
+import xyz.wingio.logra.domain.manager.PreferenceManager
 import xyz.wingio.logra.utils.Utils.cleanLine
 import java.text.SimpleDateFormat
 import java.util.*
@@ -25,6 +27,7 @@ data class LogcatEntry(
 
     val annotated: AnnotatedString
     @Composable get() = buildAnnotatedString {
+        val prefs: PreferenceManager = get()
         withStyle(
             style = SpanStyle(
                 color = MaterialTheme.colorScheme.onBackground,
@@ -39,7 +42,7 @@ data class LogcatEntry(
                 background = MaterialTheme.colorScheme.surfaceColorAtElevation(4.dp)
             )
         ) {
-            append(SimpleDateFormat(" h:mm:ssa ").format(createdAt))
+            append(SimpleDateFormat(" ${prefs.timestampFormat} ").format(createdAt))
         }
         append(" $pid $tag: $content")
     }

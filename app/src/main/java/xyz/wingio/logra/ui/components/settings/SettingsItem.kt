@@ -1,4 +1,4 @@
-package xyz.wingio.logra.ui.components
+package xyz.wingio.logra.ui.components.settings
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme

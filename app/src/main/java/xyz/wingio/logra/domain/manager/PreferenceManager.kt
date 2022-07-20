@@ -12,4 +12,6 @@ class PreferenceManager(context: Context) :
 
     var monet by booleanPreference("monet", true)
 
+    var timestampFormat by stringPreference("timestamp_format", "h:mm:ssa")
+
 }

@@ -71,10 +71,12 @@ fun LogEntry(
                         softWrap = prefs.lineWrap
                     )
                     Text(
-                        text = SimpleDateFormat("h:mm:ssa").format(log.createdAt),
+                        text = SimpleDateFormat(prefs.timestampFormat).format(log.createdAt),
                         style = MaterialTheme.typography.labelSmall.copy(fontStyle = FontStyle.Italic, fontSize = 10.sp, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
                         modifier = Modifier.fillMaxWidth(),
-                        textAlign = TextAlign.End
+                        textAlign = TextAlign.End,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
                     )
                 }
             }

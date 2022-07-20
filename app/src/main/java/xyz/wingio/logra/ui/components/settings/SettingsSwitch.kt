@@ -1,4 +1,4 @@
-package xyz.wingio.logra.ui.components
+package xyz.wingio.logra.ui.components.settings
 
 import androidx.compose.foundation.clickable
 import androidx.compose.material3.Switch
@@ -7,7 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
 @Composable
-fun SettingsSwitch(
+fun SettingsSwitch (
     modifier: Modifier = Modifier,
     label: String,
     disabled: Boolean = false,
