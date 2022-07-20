@@ -55,6 +55,6 @@ jobs:
             --title "${{ github.event.inputs.versionName }}" \
             --notes "${{ github.event.inputs.description }}" \
             app/build/outputs/apk/release/app-release.apk
-          if [${{github.event.inputs.preRelease}} == true]; then gh release edit "$tag" -p; fi
+          if ["${{github.event.inputs.preRelease}}" == "true"]; then gh release edit "$tag" -p; fi
         env:
           GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
