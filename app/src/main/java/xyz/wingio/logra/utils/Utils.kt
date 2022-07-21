@@ -19,4 +19,7 @@ object Utils {
         Toast.makeText(this@Context, text, Toast.LENGTH_LONG).show()
     }
 
+    val Enum<*>.capitalizedName: String
+        get() = name[0] + name.lowercase().slice(1 until name.length)
+
 }

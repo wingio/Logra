@@ -7,7 +7,10 @@ import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.interaction.DragInteraction
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -26,15 +29,13 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.getViewModel
-import org.koin.core.component.KoinComponent
 import xyz.wingio.logra.R
 import xyz.wingio.logra.ui.screens.settings.SettingsScreen
 import xyz.wingio.logra.ui.theme.logLineAlt
 import xyz.wingio.logra.ui.viewmodels.main.MainScreenViewModel
 import xyz.wingio.logra.ui.widgets.logs.LogEntry
-import java.text.SimpleDateFormat
 
-class MainScreen : Screen, KoinComponent {
+class MainScreen : Screen {
 
     @Composable
     override fun Content() = Screen()
@@ -172,12 +173,14 @@ class MainScreen : Screen, KoinComponent {
                     // Clear logs
                     DropdownMenuItem(
                         text = { Text(text = "Clear") },
-                        onClick = { viewModel.logs.clear(); menuOpened = false })
+                        onClick = { viewModel.logs.clear(); menuOpened = false }
+                    )
 
                     // Go to settings
                     DropdownMenuItem(
                         text = { Text(text = "Settings") },
-                        onClick = { navigator?.push(SettingsScreen()); menuOpened = false })
+                        onClick = { navigator?.push(SettingsScreen()); menuOpened = false }
+                    )
                 }
             }
         )

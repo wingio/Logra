@@ -14,7 +14,10 @@ import androidx.compose.ui.text.*
 import androidx.compose.ui.text.font.FontFamily
 import kotlinx.coroutines.launch
 import xyz.wingio.logra.BuildConfig
-import xyz.wingio.logra.utils.*
+import xyz.wingio.logra.utils.ShizukuRequestResult
+import xyz.wingio.logra.utils.Utils
+import xyz.wingio.logra.utils.checkShizukuPermission
+import xyz.wingio.logra.utils.grantPermissionsWithRoot
 import xyz.wingio.logra.utils.logcat.LogcatManager
 
 @OptIn(ExperimentalTextApi::class)
@@ -27,10 +30,12 @@ fun RequestPopup(onDialogChange: (PopupState) -> Unit) {
         text = {
             val annotatedString = buildAnnotatedString {
                 withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.onBackground)) {
-                    append("This app requires a special permission called \"Read logs\" to be able to function.\n" +
-                            "You can use root, Shizuku, or grant it manually via adb.\n" +
-                            "If you have root, press the \"Use root\" button below, and accept the superuser request.\n" +
-                            "If not, ")
+                    append(
+                        "This app requires a special permission called \"Read logs\" to be able to function.\n" +
+                                "You can use root, Shizuku, or grant it manually via adb.\n" +
+                                "If you have root, press the \"Use root\" button below, and accept the superuser request.\n" +
+                                "If not, "
+                    )
                     withStyle(
                         style = SpanStyle(color = MaterialTheme.colorScheme.primary)
                     ) {
@@ -41,10 +46,12 @@ fun RequestPopup(onDialogChange: (PopupState) -> Unit) {
                             append("Shizuku")
                         }
                     }
-                    append(" can also be used.\n" +
-                            "If neither of those options work, " +
-                            "you can manually grant it via adb with " +
-                            "the following command:\n")
+                    append(
+                        " can also be used.\n" +
+                                "If neither of those options work, " +
+                                "you can manually grant it via adb with " +
+                                "the following command:\n"
+                    )
                     withStyle(
                         style = SpanStyle(
                             fontFamily = FontFamily.Monospace,
@@ -62,9 +69,10 @@ fun RequestPopup(onDialogChange: (PopupState) -> Unit) {
             ClickableText(
                 text = annotatedString,
                 onClick = { pos ->
-                    annotatedString.getStringAnnotations("URL", pos, pos).firstOrNull()?.let { stringAnnotation ->
-                        uriHandler.openUri(stringAnnotation.item)
-                    }
+                    annotatedString.getStringAnnotations("URL", pos, pos).firstOrNull()
+                        ?.let { stringAnnotation ->
+                            uriHandler.openUri(stringAnnotation.item)
+                        }
                 }
             )
         },
@@ -90,7 +98,7 @@ fun RequestPopup(onDialogChange: (PopupState) -> Unit) {
                     // Shizuku
                     coroutineScope.launch {
                         val shizukuRequestResult = checkShizukuPermission()
-                        with (context) {
+                        with(context) {
                             when (shizukuRequestResult) {
                                 ShizukuRequestResult.GRANTED -> onDialogChange(PopupState.SHIZUKU)
                                 ShizukuRequestResult.DENIED -> Utils.showToast("Shizuku permission must be accepted in order to use it.")

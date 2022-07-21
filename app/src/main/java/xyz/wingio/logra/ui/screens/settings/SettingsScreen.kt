@@ -1,7 +1,6 @@
 package xyz.wingio.logra.ui.screens.settings
 
 import android.os.Build
-import android.text.style.ClickableSpan
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -11,31 +10,28 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.*
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import org.koin.androidx.compose.get
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 import xyz.wingio.logra.domain.manager.PreferenceManager
+import xyz.wingio.logra.ui.components.settings.SettingsHeader
+import xyz.wingio.logra.ui.components.settings.SettingsItemChoice
 import xyz.wingio.logra.ui.components.settings.SettingsSwitch
 import xyz.wingio.logra.ui.components.settings.SettingsTextField
 import java.text.SimpleDateFormat
 import java.util.*
 
-class SettingsScreen : Screen, KoinComponent {
-
-
+class SettingsScreen : Screen {
 
     @Composable
     override fun Content() = Screen()
 
     @Composable
     @OptIn(ExperimentalMaterial3Api::class)
-    private fun Screen() {
-        val prefs: PreferenceManager = get()
-
+    private fun Screen(
+        prefs: PreferenceManager = get()
+    ) {
         Scaffold(
             Modifier.fillMaxSize(),
             topBar = { Toolbar() }
@@ -43,25 +39,37 @@ class SettingsScreen : Screen, KoinComponent {
             Column(
                 Modifier.padding(paddingValues)
             ) {
+
+                SettingsHeader(text = "General")
+
+                SettingsSwitch(label = "Line Wrap", pref = prefs.lineWrap) { prefs.lineWrap = it }
+                SettingsSwitch(label = "Compact Mode", pref = prefs.compact) { prefs.compact = it }
+
+                SettingsHeader(text = "Theme")
+
                 SettingsSwitch(
                     label = "Dynamic Theming",
                     pref = prefs.monet,
                     disabled = Build.VERSION.SDK_INT < Build.VERSION_CODES.S
                 ) { prefs.monet = it }
-                SettingsSwitch(label = "Line Wrap", pref = prefs.lineWrap) { prefs.lineWrap = it }
-                SettingsSwitch(label = "Compact Mode", pref = prefs.compact) { prefs.compact = it }
 
-                Divider(
-                    modifier = Modifier.padding(vertical = 10.dp),
-                    color = MaterialTheme.colorScheme.outline
-                )
+                SettingsItemChoice(
+                    label = "Theme",
+                    pref = prefs.theme,
+                    onPrefChange = { prefs.theme = it })
 
-                SettingsTextField(label = "Timestamp Format", pref = prefs.timestampFormat, onPrefChange = {
-                    try {
-                        SimpleDateFormat(it).format(Date(System.currentTimeMillis()))
-                        prefs.timestampFormat = it
-                    } catch (e: Throwable) {}
-                } )
+                SettingsHeader(text = "Advanced")
+
+                SettingsTextField(
+                    label = "Timestamp Format",
+                    pref = prefs.timestampFormat,
+                    onPrefChange = {
+                        try {
+                            SimpleDateFormat(it).format(Date(System.currentTimeMillis()))
+                            prefs.timestampFormat = it
+                        } catch (e: Throwable) {
+                        }
+                    })
 
                 val uriHandler = LocalUriHandler.current
                 val text = formatInfo
@@ -69,11 +77,12 @@ class SettingsScreen : Screen, KoinComponent {
                 ClickableText(
                     text = text,
                     onClick = { pos ->
-                        text.getStringAnnotations("URL", pos, pos).firstOrNull()?.let { stringAnnotation ->
-                            uriHandler.openUri(stringAnnotation.item)
-                        }
+                        text.getStringAnnotations("URL", pos, pos).firstOrNull()
+                            ?.let { stringAnnotation ->
+                                uriHandler.openUri(stringAnnotation.item)
+                            }
                     },
-                    style = MaterialTheme.typography.labelSmall.copy( color = MaterialTheme.colorScheme.onSurface ),
+                    style = MaterialTheme.typography.labelSmall.copy(color = MaterialTheme.colorScheme.onSurface),
                     modifier = Modifier.padding(horizontal = 18.dp, vertical = 4.dp),
                 )
             }
@@ -85,11 +94,13 @@ class SettingsScreen : Screen, KoinComponent {
     val formatInfo
         @Composable get() = buildAnnotatedString {
             val prefs: PreferenceManager = get()
-            append("""
+            append(
+                """
                 Current date: ${SimpleDateFormat(prefs.timestampFormat).format(Date(System.currentTimeMillis()))}
                 
                 Learn more about date formats 
-            """.trimIndent())
+            """.trimIndent()
+            )
             withStyle(
                 style = SpanStyle(
                     color = MaterialTheme.colorScheme.primary,

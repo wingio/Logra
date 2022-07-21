@@ -10,7 +10,7 @@ import org.koin.androidx.compose.get
 import xyz.wingio.logra.domain.manager.PreferenceManager
 
 val ColorScheme.logLineAlt: Color
-    get() = onSurface.copy( alpha = 0.7f )
+    get() = onSurface.copy(alpha = 0.7f)
 
 @Composable
 fun LograTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {

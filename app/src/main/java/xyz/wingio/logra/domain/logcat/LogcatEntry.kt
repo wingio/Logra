@@ -26,26 +26,26 @@ data class LogcatEntry(
 ) {
 
     val annotated: AnnotatedString
-    @Composable get() = buildAnnotatedString {
-        val prefs: PreferenceManager = get()
-        withStyle(
-            style = SpanStyle(
-                color = MaterialTheme.colorScheme.onBackground,
-                background = level.color.copy(0.4f)
-            )
-        ) {
-            append(" ${level.name[0]} ")
+        @Composable get() = buildAnnotatedString {
+            val prefs: PreferenceManager = get()
+            withStyle(
+                style = SpanStyle(
+                    color = MaterialTheme.colorScheme.onBackground,
+                    background = level.color.copy(0.4f)
+                )
+            ) {
+                append(" ${level.name[0]} ")
+            }
+            withStyle(
+                style = SpanStyle(
+                    fontWeight = FontWeight.ExtraBold,
+                    background = MaterialTheme.colorScheme.surfaceColorAtElevation(4.dp)
+                )
+            ) {
+                append(SimpleDateFormat(" ${prefs.timestampFormat} ").format(createdAt))
+            }
+            append(" $pid $tag: $content")
         }
-        withStyle(
-            style = SpanStyle(
-                fontWeight = FontWeight.ExtraBold,
-                background = MaterialTheme.colorScheme.surfaceColorAtElevation(4.dp)
-            )
-        ) {
-            append(SimpleDateFormat(" ${prefs.timestampFormat} ").format(createdAt))
-        }
-        append(" $pid $tag: $content")
-    }
 
     companion object {
 

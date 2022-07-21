@@ -14,4 +14,12 @@ class PreferenceManager(context: Context) :
 
     var timestampFormat by stringPreference("timestamp_format", "h:mm:ssa")
 
+    var theme by enumPreference("theme", Theme.SYSTEM)
+
+}
+
+enum class Theme {
+    SYSTEM,
+    LIGHT,
+    DARK
 }

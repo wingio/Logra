@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun SettingsTextField (
+fun SettingsTextField(
     modifier: Modifier = Modifier,
     label: String,
     disabled: Boolean = false,
@@ -18,7 +18,7 @@ fun SettingsTextField (
     onPrefChange: (String) -> Unit,
 ) {
     Box(modifier = Modifier.padding(horizontal = 18.dp, vertical = 10.dp)) {
-        OutlinedTextField (
+        OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
             value = pref,
             onValueChange = onPrefChange,

@@ -14,6 +14,9 @@ import androidx.core.content.ContextCompat
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.transitions.SlideTransition
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import org.koin.androidx.compose.get
+import xyz.wingio.logra.domain.manager.PreferenceManager
+import xyz.wingio.logra.domain.manager.Theme
 import xyz.wingio.logra.ui.components.permission.PermissionPopup
 import xyz.wingio.logra.ui.screens.main.MainScreen
 import xyz.wingio.logra.ui.theme.LograTheme
@@ -28,7 +31,12 @@ class MainActivity : ComponentActivity() {
         LogcatManager.connect()
 
         setContent {
-            val isDark = isSystemInDarkTheme()
+            val prefs: PreferenceManager = get()
+            val isDark = when (prefs.theme) {
+                Theme.SYSTEM -> isSystemInDarkTheme()
+                Theme.LIGHT -> false
+                Theme.DARK -> true
+            }
             LograTheme(isDark) {
                 val systemUiController = rememberSystemUiController()
                 val surface = MaterialTheme.colorScheme.surface
@@ -46,7 +54,11 @@ class MainActivity : ComponentActivity() {
                     SlideTransition(it)
                 }
 
-                if (ContextCompat.checkSelfPermission(LocalContext.current, Manifest.permission.READ_LOGS) == PackageManager.PERMISSION_DENIED) {
+                if (ContextCompat.checkSelfPermission(
+                        LocalContext.current,
+                        Manifest.permission.READ_LOGS
+                    ) == PackageManager.PERMISSION_DENIED
+                ) {
                     PermissionPopup()
                 }
             }

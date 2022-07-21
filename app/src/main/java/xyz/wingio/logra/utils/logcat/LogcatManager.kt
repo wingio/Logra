@@ -2,7 +2,6 @@ package xyz.wingio.logra.utils.logcat
 
 import xyz.wingio.logra.domain.logcat.LogcatEntry
 import java.io.BufferedReader
-import java.io.InputStream
 import kotlin.concurrent.thread
 
 object LogcatManager {
@@ -20,8 +19,10 @@ object LogcatManager {
     fun listen(callback: (LogcatEntry) -> Unit) {
         thread(start = true) {
             while (true) {
-                if(!proc.isAlive) { connect(); continue }
-                if(reader.readLine() != null && reader.readLine().isNotEmpty()) {
+                if (!proc.isAlive) {
+                    connect(); continue
+                }
+                if (reader.readLine() != null && reader.readLine().isNotEmpty()) {
                     val line = reader.readLine()
                     line.split("\n").forEach {
                         try {

@@ -72,7 +72,11 @@ fun LogEntry(
                     )
                     Text(
                         text = SimpleDateFormat(prefs.timestampFormat).format(log.createdAt),
-                        style = MaterialTheme.typography.labelSmall.copy(fontStyle = FontStyle.Italic, fontSize = 10.sp, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)),
+                        style = MaterialTheme.typography.labelSmall.copy(
+                            fontStyle = FontStyle.Italic,
+                            fontSize = 10.sp,
+                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                        ),
                         modifier = Modifier.fillMaxWidth(),
                         textAlign = TextAlign.End,
                         maxLines = 1,
