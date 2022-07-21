@@ -16,12 +16,11 @@
   ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/wingio/Logra?logo=github&logoColor=%23fff&style=for-the-badge)
   ![Line count](https://img.shields.io/tokei/lines/github/wingio/Logra?logo=github&logoColor=%23fff&style=for-the-badge)
   ![GitHub top language](https://img.shields.io/github/languages/top/wingio/Logra?style=for-the-badge)
-  
-  Main Screen                            |  Settings
-:------------------------------:|:------------------------------:
- <img width="200px" src="https://user-images.githubusercontent.com/44992537/180048948-548f10c5-2d87-4974-8d25-b597aee2dfc9.png" /> | <img width="200px" src="https://user-images.githubusercontent.com/44992537/180049770-8951f417-aea8-4a4e-b691-cacf8e3b07bc.png" />
+ 
+| Compact mode off  | Compact mode on | Settings  |
+|---|---|---|
+| <img width="200px" src="https://user-images.githubusercontent.com/44992537/180048948-548f10c5-2d87-4974-8d25-b597aee2dfc9.png" />  | <img width="200px" src="https://user-images.githubusercontent.com/44992537/180328214-2e0086cc-fe5c-4a83-864a-9e3d8a55d78d.png" />  | <img width="200px" src="https://user-images.githubusercontent.com/44992537/180327957-897c3912-6389-4e6f-8f05-7451186fe0fa.png" />  |
 
-  
 </div>
 
 Installation
