@@ -5,20 +5,28 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.ClickableText
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.*
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.navigator.LocalNavigator
 import org.koin.androidx.compose.get
+import xyz.wingio.logra.R
 import xyz.wingio.logra.domain.manager.PreferenceManager
 import xyz.wingio.logra.ui.components.settings.SettingsHeader
 import xyz.wingio.logra.ui.components.settings.SettingsItemChoice
 import xyz.wingio.logra.ui.components.settings.SettingsSwitch
 import xyz.wingio.logra.ui.components.settings.SettingsTextField
+import xyz.wingio.logra.ui.screens.about.AboutScreen
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -118,8 +126,21 @@ class SettingsScreen : Screen {
 
     @Composable
     private fun Toolbar() {
+
+        val navigator = LocalNavigator.current
+
         LargeTopAppBar(
-            title = { Text("Settings") }
+            title = { Text("Settings") },
+            actions = {
+                IconButton(onClick = { navigator?.push(AboutScreen()) }) {
+                    Icon(Icons.Outlined.Info, stringResource(R.string.about))
+                }
+            },
+            navigationIcon = {
+                IconButton(onClick = { navigator?.pop() }) {
+                    Icon(Icons.Filled.ArrowBack, stringResource(R.string.back))
+                }
+            }
         )
     }
 

@@ -159,7 +159,7 @@ class MainScreen : Screen {
 
                 // Open dropdown menu
                 IconButton(onClick = { menuOpened = true }) {
-                    Icon(imageVector = Icons.Filled.MoreVert, contentDescription = "Open menu")
+                    Icon(imageVector = Icons.Filled.MoreVert, stringResource(org.koin.android.R.string.abc_action_menu_overflow_description))
                 }
 
                 DropdownMenu(

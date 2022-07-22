@@ -11,8 +11,8 @@ android {
         applicationId = "xyz.wingio.logra"
         minSdk = 21
         targetSdk = 32
-        versionCode = 1320
-        versionName = "ALPHA - 1.20"
+        versionCode = 1330
+        versionName = "ALPHA - 1.30"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -82,6 +82,8 @@ dependencies {
     implementation("cafe.adriel.voyager:voyager-tab-navigator:$voyagerVersion")
     implementation("cafe.adriel.voyager:voyager-transitions:$voyagerVersion")
     implementation("cafe.adriel.voyager:voyager-koin:$voyagerVersion")
+
+    implementation("org.lsposed.hiddenapibypass:hiddenapibypass:4.3")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.3")

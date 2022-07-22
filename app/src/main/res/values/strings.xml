@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">Logra</string>
     <string name="confirm">Confirm</string>
+    <string name="about">About</string>
+    <string name="version">Version</string>
+    <string name="source">Source</string>
+    <string name="back">Back</string>
 </resources>
