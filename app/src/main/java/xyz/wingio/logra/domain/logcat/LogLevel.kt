@@ -8,6 +8,5 @@ enum class LogLevel(val color: Color) {
     INFO(Color(0xFFaaaaaa)),
     WARNING(Color(0xFFD6C420)),
     ERROR(Color(0xFFD34339)),
-    FATAL(Color(0xFFA31111)),
-    SILENT(Color.Transparent)
+    FATAL(Color(0xFFA31111))
 }

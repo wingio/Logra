@@ -21,7 +21,7 @@ import xyz.wingio.logra.R
 import xyz.wingio.logra.ui.components.settings.SettingItem
 import xyz.wingio.logra.utils.Utils
 
-class AboutScreen: Screen {
+class AboutScreen : Screen {
 
     @Composable
     override fun Content() = Screen()
@@ -38,7 +38,12 @@ class AboutScreen: Screen {
                 modifier = Modifier.padding(it)
             ) {
                 SettingItem(
-                    icon = { Icon(Icons.Outlined.Info, contentDescription = stringResource(R.string.version)) },
+                    icon = {
+                        Icon(
+                            Icons.Outlined.Info,
+                            contentDescription = stringResource(R.string.version)
+                        )
+                    },
                     text = { Text(stringResource(R.string.version)) },
                     secondaryText = { Text("${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})") },
                     modifier = Modifier.clickable {
@@ -49,7 +54,12 @@ class AboutScreen: Screen {
                 )
                 val uriHandler = LocalUriHandler.current
                 SettingItem(
-                    icon = { Icon(painterResource(R.drawable.ic_code_24), contentDescription = stringResource(R.string.source)) },
+                    icon = {
+                        Icon(
+                            painterResource(R.drawable.ic_code_24),
+                            contentDescription = stringResource(R.string.source)
+                        )
+                    },
                     text = { Text(stringResource(R.string.source)) },
                     modifier = Modifier.clickable {
                         uriHandler.openUri("https://github.com/wingio/Logra")

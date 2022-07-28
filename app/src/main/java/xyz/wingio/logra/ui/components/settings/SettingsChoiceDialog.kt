@@ -17,7 +17,7 @@ inline fun <reified E : Enum<E>> SettingsChoiceDialog(
     noinline onRequestClose: (E) -> Unit = {},
     noinline title: @Composable () -> Unit,
     crossinline description: @Composable () -> Unit = {},
-    default: E
+    default: E,
 ) {
 
     var choice by remember { mutableStateOf(default) }

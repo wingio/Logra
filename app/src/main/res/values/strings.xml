@@ -5,4 +5,10 @@
     <string name="version">Version</string>
     <string name="source">Source</string>
     <string name="back">Back</string>
+    <string name="search">Search</string>
+    <string name="filter">Filter</string>
+    <string name="level">Level</string>
+    <string name="tag">Tag</string>
+    <string name="before">Before</string>
+    <string name="after">After</string>
 </resources>

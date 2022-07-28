@@ -4,8 +4,10 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
+import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.interaction.DragInteraction
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
@@ -13,6 +15,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.MoreVert
@@ -20,8 +23,11 @@ import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
@@ -30,6 +36,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.getViewModel
 import xyz.wingio.logra.R
+import xyz.wingio.logra.ui.components.filter.FilterRow
 import xyz.wingio.logra.ui.screens.settings.SettingsScreen
 import xyz.wingio.logra.ui.theme.logLineAlt
 import xyz.wingio.logra.ui.viewmodels.main.MainScreenViewModel
@@ -46,6 +53,7 @@ class MainScreen : Screen {
         viewModel: MainScreenViewModel = getViewModel()
     ) {
         val listState = rememberLazyListState()
+        val logs = runCatching { viewModel.filterLogs() }.getOrElse { viewModel.logs }
 
         LaunchedEffect(Unit) {
             listState.interactionSource.interactions.collectLatest {
@@ -59,9 +67,9 @@ class MainScreen : Screen {
             floatingActionButton = { JumpFAB(viewModel, listState) }
         ) { pad ->
 
-            LaunchedEffect(viewModel.logs.size) {
-                if (viewModel.logs.size > 0 && !viewModel.freeScroll.value) {
-                    listState.animateScrollToItem(viewModel.logs.lastIndex)
+            LaunchedEffect(logs.size) {
+                if (logs.isNotEmpty() && !viewModel.freeScroll.value) {
+                    listState.animateScrollToItem(logs.lastIndex)
                 }
             }
 
@@ -69,9 +77,11 @@ class MainScreen : Screen {
                 Modifier
                     .padding(pad)
             ) {
+                AnimatedVisibility(visible = viewModel.filterOpened.value) {
+                    FilterRow(oldFilter = viewModel.filter.value)
+                }
                 LazyColumn(
                     state = listState,
-                    verticalArrangement = Arrangement.spacedBy(10.dp),
                     contentPadding = PaddingValues(10.dp),
                     modifier = if (!viewModel.prefs.lineWrap && viewModel.prefs.compact) Modifier
                         .horizontalScroll(
@@ -81,7 +91,8 @@ class MainScreen : Screen {
                         .weight(1f),
                 ) {
                     itemsIndexed(
-                        viewModel.logs
+                        logs,
+                        key = { i, log -> "$i${log.hashCode()}" }
                     ) { i, it ->
                         if (viewModel.prefs.compact)
                             Text(
@@ -119,7 +130,7 @@ class MainScreen : Screen {
                 onClick = {
                     viewModel.freeScroll.value = false
                     scope.launch {
-                        if (viewModel.logs.size > 0) listState.animateScrollToItem(viewModel.logs.lastIndex)
+                        if (viewModel.logs.isNotEmpty()) listState.animateScrollToItem(viewModel.logs.lastIndex)
                     }
                 },
                 shape = RoundedCornerShape(8.dp)
@@ -132,6 +143,7 @@ class MainScreen : Screen {
         }
     }
 
+    @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     private fun Toolbar(
         viewModel: MainScreenViewModel
@@ -140,11 +152,70 @@ class MainScreen : Screen {
         var menuOpened by remember {
             mutableStateOf(false)
         }
+
+        var searchText by remember {
+            mutableStateOf(viewModel.filter.value.text)
+        }
+
         SmallTopAppBar(
             title = {
-                Text(text = stringResource(id = R.string.app_name))
+                val colors = TextFieldDefaults.textFieldColors()
+                BasicTextField(
+                    value = searchText,
+                    onValueChange = { searchText = it; viewModel.filter.value.text = it },
+                    textStyle = MaterialTheme.typography.bodyLarge.copy(
+                        color = colors.textColor(
+                            enabled = true
+                        ).value
+                    ),
+                    cursorBrush = SolidColor(colors.cursorColor(false).value),
+                    singleLine = true,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(
+                            RoundedCornerShape(200.dp)
+                        )
+                        .background(MaterialTheme.colorScheme.surfaceColorAtElevation(10.dp)),
+                    decorationBox = { innerTextField ->
+                        TextFieldDefaults.TextFieldDecorationBox(
+                            value = searchText,
+                            innerTextField = innerTextField,
+                            placeholder = { Text(stringResource(R.string.search)) },
+                            trailingIcon = {
+                                if (searchText.isNotEmpty()) IconButton(onClick = {
+                                    searchText = ""; viewModel.filter.value.text = ""
+                                }) {
+                                    Icon(
+                                        painterResource(R.drawable.ic_clear_24),
+                                        contentDescription = "Clear"
+                                    )
+                                }
+                            },
+                            singleLine = true,
+                            enabled = true,
+                            interactionSource = remember { MutableInteractionSource() },
+                            visualTransformation = VisualTransformation.None,
+                            contentPadding = PaddingValues(
+                                start = 14.dp,
+                                end = 12.dp,
+                                top = 10.dp,
+                                bottom = 10.dp
+                            )
+                        )
+                    }
+                )
             },
             actions = {
+                Spacer(modifier = Modifier.width(10.dp))
+                // Open filter dialog
+                IconButton(onClick = {
+                    viewModel.filterOpened.value = !viewModel.filterOpened.value
+                }) {
+                    Icon(
+                        painterResource(R.drawable.ic_filter_24),
+                        contentDescription = stringResource(R.string.filter)
+                    )
+                }
 
                 // Pause/Unpause logs
                 IconButton(onClick = { viewModel.paused.value = !viewModel.paused.value }) {
@@ -159,7 +230,10 @@ class MainScreen : Screen {
 
                 // Open dropdown menu
                 IconButton(onClick = { menuOpened = true }) {
-                    Icon(imageVector = Icons.Filled.MoreVert, stringResource(org.koin.android.R.string.abc_action_menu_overflow_description))
+                    Icon(
+                        imageVector = Icons.Filled.MoreVert,
+                        stringResource(org.koin.android.R.string.abc_action_menu_overflow_description)
+                    )
                 }
 
                 DropdownMenu(

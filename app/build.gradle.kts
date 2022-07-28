@@ -30,7 +30,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.3.0-beta01"
+        kotlinCompilerExtensionVersion = "1.2.0"
     }
 
     kotlinOptions {
@@ -47,7 +47,7 @@ android {
 
 dependencies {
 
-    val composeVersion = "1.2.0-alpha08"
+    val composeVersion = "1.3.0-alpha01"
 
     implementation("androidx.core:core-ktx:1.8.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.3")
@@ -72,9 +72,10 @@ dependencies {
     implementation("io.insert-koin:koin-android:$koinVersion")
     implementation("io.insert-koin:koin-androidx-compose:$koinVersion")
 
-    val accompanistVersion = "0.24.6-alpha"
+    val accompanistVersion = "0.24.13-rc"
 
     implementation("com.google.accompanist:accompanist-systemuicontroller:$accompanistVersion")
+    implementation("com.google.accompanist:accompanist-flowlayout:$accompanistVersion")
 
     val voyagerVersion = "1.0.0-rc02"
 
@@ -83,15 +84,13 @@ dependencies {
     implementation("cafe.adriel.voyager:voyager-transitions:$voyagerVersion")
     implementation("cafe.adriel.voyager:voyager-koin:$voyagerVersion")
 
-    implementation("org.lsposed.hiddenapibypass:hiddenapibypass:4.3")
+    val shizukuVersion = "12.1.0"
+    implementation("dev.rikka.shizuku:api:$shizukuVersion")
+    implementation("dev.rikka.shizuku:provider:$shizukuVersion")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.3")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
     androidTestImplementation("androidx.compose.ui:ui-test-junit4:$composeVersion")
     debugImplementation ("androidx.compose.ui:ui-tooling:$composeVersion")
-
-    val shizukuVersion = "12.1.0"
-    implementation("dev.rikka.shizuku:api:$shizukuVersion")
-    implementation("dev.rikka.shizuku:provider:$shizukuVersion")
 }
