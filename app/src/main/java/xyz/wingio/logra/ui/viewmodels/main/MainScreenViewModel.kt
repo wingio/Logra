@@ -3,6 +3,9 @@ package xyz.wingio.logra.ui.viewmodels.main
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import xyz.wingio.logra.domain.logcat.LogcatEntry
 import xyz.wingio.logra.domain.logcat.filter.Filter
 import xyz.wingio.logra.domain.manager.PreferenceManager
@@ -14,7 +17,6 @@ class MainScreenViewModel(
 ) : ViewModel() {
 
     var logs = mutableStateListOf<LogcatEntry>()
-    private val unfilteredLogs = mutableListOf<LogcatEntry>()
 
     private val pausedLogs = mutableListOf<LogcatEntry>()
 
@@ -25,13 +27,15 @@ class MainScreenViewModel(
     var filter = mutableStateOf(Filter())
 
     init {
-        LogcatManager.listen {
-            if (paused.value)
-                pausedLogs.add(it)
-            else {
-                logs.addAll(pausedLogs)
-                pausedLogs.clear()
-                logs.add(it)
+        viewModelScope.launch(Dispatchers.IO) {
+            LogcatManager.listen {
+                if (paused.value)
+                    pausedLogs.add(it)
+                else {
+                    logs.addAll(pausedLogs)
+                    pausedLogs.clear()
+                    logs.add(it)
+                }
             }
         }
     }
