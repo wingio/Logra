@@ -15,22 +15,21 @@ import xyz.wingio.logra.domain.logcat.filter.Filter
 @Composable
 fun TagInputDialog(
     modifier: Modifier = Modifier,
-    currentFilter: Filter? = null,
+    visible: Boolean = false,
     onDismissRequest: () -> Unit,
     onConfirm: (String) -> Unit
 ) {
-    val filter = currentFilter ?: Filter()
 
-    var text by remember { mutableStateOf(filter.tag) }
+    var text by remember { mutableStateOf("") }
 
-    AlertDialog(
+    if(visible) AlertDialog(
         onDismissRequest = onDismissRequest,
         confirmButton = {
             Button(onClick = { onConfirm(text); onDismissRequest() }) {
                 Text(stringResource(R.string.confirm))
             }
         },
-        title = { Text(stringResource(R.string.tag)) },
+//        title = { Text(stringResource(R.string.tag)) },
         text = {
             Column {
                 OutlinedTextField(

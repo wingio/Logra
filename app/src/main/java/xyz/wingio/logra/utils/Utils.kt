@@ -31,7 +31,7 @@ object Utils {
     fun LogcatEntry.matches(filter: Filter): Boolean {
         val textMatches = filter.text.isBlank() || content.contains(filter.text)
         val levelMatches = filter.levels.contains(level)
-        val tagMatches = filter.tag.isBlank() || tag.contains(filter.tag)
+        val tagMatches = filter.tags.isEmpty() || filter.tags.map { it.lowercase() }.contains(tag.lowercase())
 
         return textMatches && levelMatches && tagMatches
     }

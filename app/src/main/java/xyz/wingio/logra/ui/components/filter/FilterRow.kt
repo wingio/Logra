@@ -55,7 +55,7 @@ fun FilterRow(
                     val defaultFilter = Filter()
                     filter.apply {
                         levels = defaultFilter.levels
-                        tag = defaultFilter.tag
+                        tags = defaultFilter.tags
                     }
                 }
             ) { Icon(imageVector = Icons.Filled.Refresh, contentDescription = "Reset") }
@@ -76,6 +76,29 @@ fun FilterRow(
             modifier = Modifier.padding(start = 20.dp),
             horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
+            filter.tags.forEach {
+                ElevatedAssistChip(
+                    onClick = {
+                        if (filter.tags.contains(it)) filter.tags.remove(it)
+                    },
+                    label = { Text(text = it) },
+                    leadingIcon = {
+                        Icon(
+                            painterResource(id = R.drawable.ic_tag_24),
+                            "Tag",
+                            modifier = Modifier.size(15.dp)
+                        )
+                    },
+                    trailingIcon = {
+                        Icon(
+                            painterResource(id = R.drawable.ic_clear_24),
+                            "Remove",
+                            modifier = Modifier.size(15.dp)
+                        )
+                    }
+                )
+            }
+
             filter.levels.forEach {
                 ElevatedAssistChip(
                     onClick = {
@@ -111,6 +134,10 @@ private fun NewFilterDropdown(
         mutableStateOf(false)
     }
 
+    var tagOpened by remember {
+        mutableStateOf(false)
+    }
+
     DropdownMenu(expanded, onDismissRequest, offset = DpOffset(35.dp, 0.dp)) {
         DropdownMenuItem(
             text = { Text(stringResource(R.string.level)) },
@@ -119,8 +146,7 @@ private fun NewFilterDropdown(
         )
         DropdownMenuItem(
             text = { Text(stringResource(R.string.tag)) },
-            onClick = { onDismissRequest() },
-            enabled = false
+            onClick = { onDismissRequest(); tagOpened = true},
         )
         DropdownMenuItem(
             text = { Text(stringResource(R.string.before)) },
@@ -142,6 +168,12 @@ private fun NewFilterDropdown(
             levelOpened = false
             if (!filter.levels.contains(it)) filter.levels.add(it)
         }
+    )
+
+    TagInputDialog(
+        onDismissRequest = {tagOpened = false},
+        onConfirm = { if (!filter.tags.contains(it)) filter.tags.add(it) },
+        visible = tagOpened
     )
 
 }

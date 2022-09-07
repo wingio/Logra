@@ -29,7 +29,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         LogcatManager.connect()
-        LogcatManager.start()
 
         setContent {
             val prefs: PreferenceManager = get()

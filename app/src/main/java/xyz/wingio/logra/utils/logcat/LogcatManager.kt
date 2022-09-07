@@ -13,21 +13,13 @@ object LogcatManager {
     private lateinit var reader: BufferedReader
     private lateinit var proc: Process
 
-    private lateinit var logFlow: Flow<LogcatEntry>
-
     fun connect() {
         proc = Runtime.getRuntime().exec(command)
         reader = proc.inputStream.bufferedReader()
     }
 
-    suspend fun listen(callback: (LogcatEntry) -> Unit) {
-        logFlow.collect {
-            callback(it)
-        }
-    }
-
-    fun start() {
-        logFlow = flow {
+    fun listen(callback: (LogcatEntry) -> Unit) {
+        thread(start = true) {
             while (true) {
                 if (!proc.isAlive) {
                     connect(); continue
@@ -37,9 +29,7 @@ object LogcatManager {
                     line.split("\n").forEach {
                         try {
                             val ent = LogcatEntry.fromLine(it)
-                            ent?.let { log ->
-                                emit(log)
-                            }
+                            ent?.let(callback)
                         } catch (th: Throwable) {
                         }
                     }

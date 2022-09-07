@@ -5,7 +5,7 @@ import java.util.*
 
 data class Filter(
     var text: String = "",
-    var tag: String = "",
+    var tags: MutableList<String> = mutableListOf(),
     var regex: Boolean = false,
     var levels: MutableList<LogLevel> = LogLevel.values().toMutableList(),
     var after: Date = Date(0),
