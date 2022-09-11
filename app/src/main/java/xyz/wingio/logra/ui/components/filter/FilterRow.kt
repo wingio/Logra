@@ -85,14 +85,14 @@ fun FilterRow(
                     leadingIcon = {
                         Icon(
                             painterResource(id = R.drawable.ic_tag_24),
-                            "Tag",
+                            stringResource(id = R.string.tag),
                             modifier = Modifier.size(15.dp)
                         )
                     },
                     trailingIcon = {
                         Icon(
                             painterResource(id = R.drawable.ic_clear_24),
-                            "Remove",
+                            stringResource(id = R.string.remove),
                             modifier = Modifier.size(15.dp)
                         )
                     }
@@ -108,7 +108,7 @@ fun FilterRow(
                     trailingIcon = {
                         Icon(
                             painterResource(id = R.drawable.ic_clear_24),
-                            "Remove",
+                            stringResource(id = R.string.remove),
                             modifier = Modifier.size(15.dp)
                         )
                     }
@@ -146,7 +146,7 @@ private fun NewFilterDropdown(
         )
         DropdownMenuItem(
             text = { Text(stringResource(R.string.tag)) },
-            onClick = { onDismissRequest(); tagOpened = true},
+            onClick = { onDismissRequest(); tagOpened = true },
         )
         DropdownMenuItem(
             text = { Text(stringResource(R.string.before)) },
@@ -171,7 +171,7 @@ private fun NewFilterDropdown(
     )
 
     TagInputDialog(
-        onDismissRequest = {tagOpened = false},
+        onDismissRequest = { tagOpened = false },
         onConfirm = { if (!filter.tags.contains(it)) filter.tags.add(it) },
         visible = tagOpened
     )

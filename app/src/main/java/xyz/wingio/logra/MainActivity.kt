@@ -1,6 +1,7 @@
 package xyz.wingio.logra
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -20,6 +21,7 @@ import xyz.wingio.logra.domain.manager.Theme
 import xyz.wingio.logra.ui.components.permission.PermissionPopup
 import xyz.wingio.logra.ui.screens.main.MainScreen
 import xyz.wingio.logra.ui.theme.LograTheme
+import xyz.wingio.logra.utils.Utils
 import xyz.wingio.logra.utils.logcat.LogcatManager
 
 class MainActivity : ComponentActivity() {
@@ -61,6 +63,25 @@ class MainActivity : ComponentActivity() {
                 ) {
                     PermissionPopup()
                 }
+            }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (resultCode == RESULT_OK && data != null) {
+            if (requestCode == 1) {
+                try {
+                    val fos = contentResolver.openOutputStream(data.data!!)
+                    fos?.write(Utils.textToSave.toByteArray())
+                    fos?.flush()
+                    fos?.close()
+
+                    Utils.showToast(getString(R.string.save_successful))
+                } catch (e: Throwable) {
+                    Utils.showToast(getString(R.string.save_failed))
+                }
+
+                Utils.textToSave = ""
             }
         }
     }

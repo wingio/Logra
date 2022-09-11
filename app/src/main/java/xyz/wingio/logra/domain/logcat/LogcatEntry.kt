@@ -73,7 +73,7 @@ data class LogcatEntry(
                 level = LogLevel.values().first { it.name.startsWith(level ?: "S") },
                 tag = tag?.trim() ?: "",
                 content = content?.trim() ?: "",
-                raw = line.cleanLine()
+                raw = line.trim()
             )
         }
     }

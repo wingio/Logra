@@ -10,7 +10,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import xyz.wingio.logra.R
-import xyz.wingio.logra.domain.logcat.filter.Filter
 
 @Composable
 fun TagInputDialog(
@@ -22,7 +21,7 @@ fun TagInputDialog(
 
     var text by remember { mutableStateOf("") }
 
-    if(visible) AlertDialog(
+    if (visible) AlertDialog(
         onDismissRequest = onDismissRequest,
         confirmButton = {
             Button(onClick = { onConfirm(text); onDismissRequest() }) {

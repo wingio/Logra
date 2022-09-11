@@ -26,6 +26,8 @@ class MainScreenViewModel(
 
     var filter = mutableStateOf(Filter())
 
+    val selectedLogs = mutableStateListOf<LogcatEntry>()
+
     init {
         viewModelScope.launch(Dispatchers.IO) {
             LogcatManager.listen {
@@ -43,5 +45,6 @@ class MainScreenViewModel(
     fun filterLogs(): List<LogcatEntry> {
         return logs.matches(filter.value)
     }
+
 
 }

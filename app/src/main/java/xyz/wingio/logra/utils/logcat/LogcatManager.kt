@@ -1,7 +1,5 @@
 package xyz.wingio.logra.utils.logcat
 
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import xyz.wingio.logra.domain.logcat.LogcatEntry
 import java.io.BufferedReader
 import kotlin.concurrent.thread

@@ -11,4 +11,14 @@
     <string name="tag">Tag</string>
     <string name="before">Before</string>
     <string name="after">After</string>
+    <string name="remove">Remove</string>
+    <plurals name="selected">
+        <item quantity="one">%d log selected</item>
+        <item quantity="other">%d logs selected</item>
+    </plurals>
+    <string name="share">Share</string>
+    <string name="save">Save to file</string>
+    <string name="save_successful">Successfully saved file!</string>
+    <string name="save_failed">Failed to save file</string>
+    <string name="clear_slected">Clear selected</string>
 </resources>

@@ -25,6 +25,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.VisualTransformation
@@ -41,6 +42,10 @@ import xyz.wingio.logra.ui.screens.settings.SettingsScreen
 import xyz.wingio.logra.ui.theme.logLineAlt
 import xyz.wingio.logra.ui.viewmodels.main.MainScreenViewModel
 import xyz.wingio.logra.ui.widgets.logs.LogEntry
+import xyz.wingio.logra.ui.widgets.selection.SelectionPopup
+import xyz.wingio.logra.utils.Utils.saveText
+import java.text.SimpleDateFormat
+import java.util.*
 
 class MainScreen : Screen {
 
@@ -64,7 +69,12 @@ class MainScreen : Screen {
         Scaffold(
             modifier = Modifier.fillMaxSize(),
             topBar = { Toolbar(viewModel) },
-            floatingActionButton = { JumpFAB(viewModel, listState) }
+            floatingActionButton = { JumpFAB(viewModel, listState) },
+            bottomBar = {
+                SelectionPopup(viewModel.selectedLogs) {
+                    viewModel.selectedLogs.clear()
+                }
+            }
         ) { pad ->
 
             LaunchedEffect(logs.size) {
@@ -103,13 +113,11 @@ class MainScreen : Screen {
                                 ),
                                 softWrap = viewModel.prefs.lineWrap,
                                 modifier = Modifier.padding(4.dp),
-
-                                )
-                        else LogEntry(it)
+                            )
+                        else LogEntry(it, selected = viewModel.selectedLogs)
                     }
                 }
             }
-
 
         }
     }
@@ -122,7 +130,7 @@ class MainScreen : Screen {
     ) {
         val scope = rememberCoroutineScope()
         AnimatedVisibility(
-            visible = viewModel.freeScroll.value,
+            visible = viewModel.freeScroll.value && viewModel.selectedLogs.isEmpty(),
             enter = scaleIn(),
             exit = scaleOut()
         ) {
@@ -149,6 +157,7 @@ class MainScreen : Screen {
         viewModel: MainScreenViewModel
     ) {
         val navigator = LocalNavigator.current
+        val ctx = LocalContext.current
         var menuOpened by remember {
             mutableStateOf(false)
         }
@@ -247,7 +256,25 @@ class MainScreen : Screen {
                     // Clear logs
                     DropdownMenuItem(
                         text = { Text(text = "Clear") },
-                        onClick = { viewModel.logs.clear(); menuOpened = false }
+                        onClick = {
+                            viewModel.logs.clear()
+                            viewModel.selectedLogs.clear()
+                            menuOpened = false
+                        }
+                    )
+
+                    DropdownMenuItem(
+                        text = { Text(text = stringResource(id = R.string.save)) },
+                        onClick = {
+                            ctx.saveText(
+                                viewModel.logs
+                                    .sortedBy { it.createdAt }
+                                    .joinToString("\n") {
+                                        it.raw
+                                    },
+                                "Logcat ${SimpleDateFormat("M/dd/yy H:mm:ss.SSS").format(Date())}"
+                            )
+                        }
                     )
 
                     // Go to settings

@@ -1,9 +1,7 @@
 package xyz.wingio.logra.ui.widgets.logs
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -20,15 +18,23 @@ import androidx.compose.ui.unit.sp
 import org.koin.androidx.compose.get
 import xyz.wingio.logra.domain.logcat.LogcatEntry
 import xyz.wingio.logra.domain.manager.PreferenceManager
+import xyz.wingio.logra.utils.Utils.addUnique
 import java.text.SimpleDateFormat
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun LogEntry(
     log: LogcatEntry,
-    prefs: PreferenceManager = get()
+    prefs: PreferenceManager = get(),
+    selected: MutableList<LogcatEntry> = mutableListOf()
 ) {
-    ElevatedCard {
+    val isSelected = selected.contains(log)
+
+    ElevatedCard(
+        colors = CardDefaults.elevatedCardColors(
+            containerColor = if (isSelected) MaterialTheme.colorScheme.surfaceVariant else MaterialTheme.colorScheme.surface
+        )
+    ) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -40,6 +46,14 @@ fun LogEntry(
                             size = Size(12f, size.height),
                         )
                     }
+                }
+                .combinedClickable(onLongClick = {
+                    if (selected.isEmpty()) selected.addUnique(log)
+                }) {
+                    if (isSelected)
+                        selected.remove(log)
+                    else if (selected.isNotEmpty())
+                        selected.addUnique(log)
                 }
         ) {
             Box(
@@ -86,7 +100,9 @@ fun LogEntry(
             }
         }
     }
-    Spacer(modifier = Modifier
-        .height(10.dp)
-        .fillMaxWidth())
+    Spacer(
+        modifier = Modifier
+            .height(10.dp)
+            .fillMaxWidth()
+    )
 }
