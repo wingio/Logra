@@ -1,6 +1,7 @@
 package xyz.wingio.logra.domain.logcat.filter
 
 import xyz.wingio.logra.domain.logcat.LogLevel
+import java.time.LocalDate
 import java.util.*
 
 data class Filter(
@@ -8,6 +9,6 @@ data class Filter(
     var tags: MutableList<String> = mutableListOf(),
     var regex: Boolean = false,
     var levels: MutableList<LogLevel> = LogLevel.values().toMutableList(),
-    var after: Date = Date(0),
-    var before: Date = Date(Long.MAX_VALUE)
+    var after: LocalDate = LocalDate.MIN,
+    var before: LocalDate = LocalDate.MAX
 )

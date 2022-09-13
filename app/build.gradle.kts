@@ -4,13 +4,13 @@ plugins {
 }
 
 android {
-    compileSdk = 32
+    compileSdk = 33
     buildToolsVersion = "30.0.3"
 
     defaultConfig {
         applicationId = "xyz.wingio.logra"
-        minSdk = 21
-        targetSdk = 32
+        minSdk = 26
+        targetSdk = 33
         versionCode = 1330
         versionName = "ALPHA - 1.30"
 

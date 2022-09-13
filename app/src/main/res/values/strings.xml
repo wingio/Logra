@@ -21,4 +21,5 @@
     <string name="save_successful">Successfully saved file!</string>
     <string name="save_failed">Failed to save file</string>
     <string name="clear_slected">Clear selected</string>
+    <string name="clear">Clear</string>
 </resources>

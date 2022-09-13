@@ -38,6 +38,7 @@ import kotlinx.coroutines.launch
 import org.koin.androidx.compose.getViewModel
 import xyz.wingio.logra.R
 import xyz.wingio.logra.ui.components.filter.FilterRow
+import xyz.wingio.logra.ui.components.filter.RoundedTextBox
 import xyz.wingio.logra.ui.screens.settings.SettingsScreen
 import xyz.wingio.logra.ui.theme.logLineAlt
 import xyz.wingio.logra.ui.viewmodels.main.MainScreenViewModel
@@ -168,51 +169,13 @@ class MainScreen : Screen {
 
         SmallTopAppBar(
             title = {
-                val colors = TextFieldDefaults.textFieldColors()
-                BasicTextField(
-                    value = searchText,
-                    onValueChange = { searchText = it; viewModel.filter.value.text = it },
-                    textStyle = MaterialTheme.typography.bodyLarge.copy(
-                        color = colors.textColor(
-                            enabled = true
-                        ).value
-                    ),
-                    cursorBrush = SolidColor(colors.cursorColor(false).value),
-                    singleLine = true,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(
-                            RoundedCornerShape(200.dp)
-                        )
-                        .background(MaterialTheme.colorScheme.surfaceColorAtElevation(10.dp)),
-                    decorationBox = { innerTextField ->
-                        TextFieldDefaults.TextFieldDecorationBox(
-                            value = searchText,
-                            innerTextField = innerTextField,
-                            placeholder = { Text(stringResource(R.string.search)) },
-                            trailingIcon = {
-                                if (searchText.isNotEmpty()) IconButton(onClick = {
-                                    searchText = ""; viewModel.filter.value.text = ""
-                                }) {
-                                    Icon(
-                                        painterResource(R.drawable.ic_clear_24),
-                                        contentDescription = "Clear"
-                                    )
-                                }
-                            },
-                            singleLine = true,
-                            enabled = true,
-                            interactionSource = remember { MutableInteractionSource() },
-                            visualTransformation = VisualTransformation.None,
-                            contentPadding = PaddingValues(
-                                start = 14.dp,
-                                end = 12.dp,
-                                top = 10.dp,
-                                bottom = 10.dp
-                            )
-                        )
-                    }
-                )
+                RoundedTextBox (
+                    text = searchText,
+                    placeholder = stringResource(id = R.string.search)
+                ) {
+                    searchText = it
+                    viewModel.filter.value.text = it
+                }
             },
             actions = {
                 Spacer(modifier = Modifier.width(10.dp))
