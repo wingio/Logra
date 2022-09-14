@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.os.Process
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -15,14 +16,20 @@ import androidx.core.content.ContextCompat
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.transitions.SlideTransition
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import kotlinx.coroutines.*
 import org.koin.androidx.compose.get
 import xyz.wingio.logra.domain.manager.PreferenceManager
 import xyz.wingio.logra.domain.manager.Theme
 import xyz.wingio.logra.ui.components.permission.PermissionPopup
 import xyz.wingio.logra.ui.screens.main.MainScreen
 import xyz.wingio.logra.ui.theme.LograTheme
+import xyz.wingio.logra.utils.Logger
 import xyz.wingio.logra.utils.Utils
+import xyz.wingio.logra.utils.Utils.saveText
 import xyz.wingio.logra.utils.logcat.LogcatManager
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.coroutines.CoroutineContext
 
 class MainActivity : ComponentActivity() {
 
@@ -82,6 +89,27 @@ class MainActivity : ComponentActivity() {
                 }
 
                 Utils.textToSave = ""
+            }
+        }
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        intent?.let {
+            if(it.action == "logra.actions.EXPORT_LOGS") {
+                val pid = it.extras?.getInt("logra.extras.PID") ?: return
+                CoroutineScope(Dispatchers.IO).launch {
+                    LogcatManager.getLogsFromPid(pid).also { logs ->
+                        saveText(
+                            logs
+                                .sortedBy { log -> log.createdAt }
+                                .joinToString("\n") { log ->
+                                    log.raw
+                                },
+                            "Logcat (${pid}) ${SimpleDateFormat("M/dd/yy H:mm:ss.SSS").format(Date())}"
+                        )
+                    }
+                }
             }
         }
     }
