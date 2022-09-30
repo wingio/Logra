@@ -9,7 +9,6 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun SettingsHeader(
-    modifier: Modifier = Modifier,
     text: String
 ) {
     Text(

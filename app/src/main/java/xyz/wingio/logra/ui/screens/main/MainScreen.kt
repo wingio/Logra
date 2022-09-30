@@ -165,7 +165,7 @@ class MainScreen : Screen {
             mutableStateOf(viewModel.filter.value.text)
         }
 
-        SmallTopAppBar(
+        TopAppBar(
             title = {
                 RoundedTextBox (
                     text = searchText,

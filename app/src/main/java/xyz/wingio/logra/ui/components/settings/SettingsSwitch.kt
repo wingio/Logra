@@ -8,7 +8,6 @@ import androidx.compose.ui.Modifier
 
 @Composable
 fun SettingsSwitch(
-    modifier: Modifier = Modifier,
     label: String,
     secondaryLabel: String? = null,
     disabled: Boolean = false,

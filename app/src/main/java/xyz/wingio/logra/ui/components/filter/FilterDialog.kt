@@ -2,18 +2,15 @@ package xyz.wingio.logra.ui.components.filter
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import xyz.wingio.logra.R
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TagInputDialog(
-    modifier: Modifier = Modifier,
     visible: Boolean = false,
     onDismissRequest: () -> Unit,
     onConfirm: (String) -> Unit

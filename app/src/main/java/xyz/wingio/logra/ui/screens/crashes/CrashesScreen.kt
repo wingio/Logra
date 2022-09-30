@@ -60,10 +60,7 @@ class CrashesScreen : Screen {
         viewModel: CrashesViewModel = getScreenModel()
     ) {
         val nav = LocalNavigator.current
-        val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(
-            rememberSplineBasedDecay(),
-            rememberTopAppBarScrollState()
-        )
+        val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
         if (nav?.lastEvent == StackEvent.Pop) viewModel.getCrashes()
 
         Scaffold(
@@ -89,6 +86,7 @@ class CrashesScreen : Screen {
         }
     }
 
+    @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     private fun TopBar(
         scrollBehavior: TopAppBarScrollBehavior,
@@ -122,7 +120,6 @@ class CrashesScreen : Screen {
     }
 
     @Composable
-    @OptIn(ExperimentalMaterial3Api::class)
     private fun EnabledSwitch(
         prefs: PreferenceManager = get()
     ) {

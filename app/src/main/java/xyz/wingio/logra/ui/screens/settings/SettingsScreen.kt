@@ -124,6 +124,7 @@ class SettingsScreen : Screen {
         }
 
     @Composable
+    @OptIn(ExperimentalMaterial3Api::class)
     private fun Toolbar() {
 
         val navigator = LocalNavigator.current

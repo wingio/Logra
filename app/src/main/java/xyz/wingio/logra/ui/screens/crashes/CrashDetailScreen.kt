@@ -169,6 +169,7 @@ class CrashDetailScreen(private val crash: Crash) : Screen {
         }
     }
 
+    @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     private fun TopBar() {
         val ctx = LocalContext.current

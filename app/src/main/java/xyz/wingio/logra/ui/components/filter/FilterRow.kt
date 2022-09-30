@@ -24,7 +24,6 @@ import xyz.wingio.logra.utils.Utils.capitalizedName
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FilterRow(
-    modifier: Modifier = Modifier,
     oldFilter: Filter
 ) {
     val scrollState = rememberScrollState()

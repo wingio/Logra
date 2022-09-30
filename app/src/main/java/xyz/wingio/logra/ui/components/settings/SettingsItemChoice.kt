@@ -11,7 +11,6 @@ import xyz.wingio.logra.utils.Utils.capitalizedName
 
 @Composable
 inline fun <reified E : Enum<E>> SettingsItemChoice(
-    modifier: Modifier = Modifier,
     label: String,
     title: String = label,
     disabled: Boolean = false,

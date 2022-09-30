@@ -25,16 +25,13 @@ fun RoundedTextBox (
     placeholder: String = "",
     onTextChanged: ((String) -> Unit)
 ) {
-    val colors = TextFieldDefaults.textFieldColors()
     BasicTextField(
         value = text,
         onValueChange = onTextChanged,
         textStyle = MaterialTheme.typography.bodyLarge.copy(
-            color = colors.textColor(
-                enabled = true
-            ).value
+            color = MaterialTheme.colorScheme.onSurface
         ),
-        cursorBrush = SolidColor(colors.cursorColor(false).value),
+        cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
         singleLine = true,
         modifier = Modifier
             .fillMaxWidth()
