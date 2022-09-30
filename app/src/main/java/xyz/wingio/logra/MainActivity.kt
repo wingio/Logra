@@ -1,51 +1,57 @@
 package xyz.wingio.logra
 
-import android.Manifest
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Bundle
-import android.os.Process
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.SideEffect
-import androidx.compose.ui.platform.LocalContext
-import androidx.core.content.ContextCompat
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.transitions.SlideTransition
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import kotlinx.coroutines.*
-import org.koin.androidx.compose.get
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
+import xyz.wingio.logra.crashdetector.db.entities.Crash
 import xyz.wingio.logra.domain.manager.PreferenceManager
 import xyz.wingio.logra.domain.manager.Theme
 import xyz.wingio.logra.ui.components.permission.PermissionPopup
+import xyz.wingio.logra.ui.screens.crashes.CrashDetailScreen
 import xyz.wingio.logra.ui.screens.main.MainScreen
 import xyz.wingio.logra.ui.theme.LograTheme
-import xyz.wingio.logra.utils.Logger
+import xyz.wingio.logra.utils.Intents
 import xyz.wingio.logra.utils.Utils
 import xyz.wingio.logra.utils.Utils.saveText
+import xyz.wingio.logra.utils.hasLogsPermission
+import xyz.wingio.logra.utils.initCrashService
 import xyz.wingio.logra.utils.logcat.LogcatManager
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.coroutines.CoroutineContext
 
 class MainActivity : ComponentActivity() {
+
+    val prefs: PreferenceManager by inject()
 
     @OptIn(ExperimentalAnimationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         LogcatManager.connect()
+        val showCrash =
+            intent.action == Intents.Actions.VIEW_CRASH && intent.hasExtra(Intents.Extras.CRASH)
+        if (prefs.crashDetectorEnabled) initCrashService()
 
         setContent {
-            val prefs: PreferenceManager = get()
+
             val isDark = when (prefs.theme) {
                 Theme.SYSTEM -> isSystemInDarkTheme()
                 Theme.LIGHT -> false
                 Theme.DARK -> true
             }
+
             LograTheme(isDark) {
                 val systemUiController = rememberSystemUiController()
                 val surface = MaterialTheme.colorScheme.surface
@@ -59,15 +65,20 @@ class MainActivity : ComponentActivity() {
                     }
                 }
 
-                Navigator(screen = MainScreen()) {
+                Navigator(
+                    screen = if (showCrash)
+                        CrashDetailScreen(
+                            intent.getSerializableExtra(
+                                Intents.Extras.CRASH,
+                                Crash::class.java
+                            )!!
+                        )
+                    else MainScreen()
+                ) {
                     SlideTransition(it)
                 }
 
-                if (ContextCompat.checkSelfPermission(
-                        LocalContext.current,
-                        Manifest.permission.READ_LOGS
-                    ) == PackageManager.PERMISSION_DENIED
-                ) {
+                if (!hasLogsPermission) {
                     PermissionPopup()
                 }
             }

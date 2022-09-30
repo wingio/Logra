@@ -5,6 +5,9 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
     <uses-permission android:name="android.permission.READ_LOGS" tools:ignore="ProtectedPermissions"/>
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
     <uses-sdk android:minSdkVersion="21" tools:overrideLibrary="rikka.shizuku.provider,rikka.shizuku.api,rikka.shizuku.shared,rikka.shizuku.aidl" />
 
@@ -15,13 +18,13 @@
         android:name=".app.App"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:largeHeap="true"
         android:theme="@style/Theme.Logra">
         <activity
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/Theme.Logra"
-            android:launchMode="singleTop">
+            android:theme="@style/Theme.Logra">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -30,7 +33,26 @@
                 <action android:name="logra.actions.EXPORT_LOGS" />
                 <category android:name="android.intent.category.OPENABLE" />
             </intent-filter>
+            <intent-filter android:exported="false">
+                <action android:name="logra.actions.VIEW_CRASH" />
+                <category android:name="android.intent.category.OPENABLE" />
+            </intent-filter>
         </activity>
+
+        <service android:name=".crashdetector.services.CrashDetectionService" android:exported="false" />
+
+        <receiver android:name=".crashdetector.receivers.CrashReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="logra.actions.EXCEPTION" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".crashdetector.receivers.StopReceiver" android:exported="false" />
+        <receiver android:name=".crashdetector.receivers.BootReceiver" android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
 
         <provider
                 android:name="rikka.shizuku.ShizukuProvider"

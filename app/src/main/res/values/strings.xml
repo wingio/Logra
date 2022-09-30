@@ -17,9 +17,22 @@
         <item quantity="other">%d logs selected</item>
     </plurals>
     <string name="share">Share</string>
+    <string name="copy">Copy</string>
     <string name="save">Save to file</string>
     <string name="save_successful">Successfully saved file!</string>
     <string name="save_failed">Failed to save file</string>
     <string name="clear_slected">Clear selected</string>
     <string name="clear">Clear</string>
+
+    <string-array name="crash_service_messages">
+        <item>Waiting for crashes…</item>
+        <item>Keeping an eye out…</item>
+        <item>Looking out for stray crashes…</item>
+        <item>Making sure your apps behave…</item>
+    </string-array>
+    <string name="stop">Stop</string>
+    <string name="crashes">Crashes</string>
+    <string name="crash">Crash</string>
+    <string name="delete">Delete</string>
+    <string name="crash_info">From %s (%s) at %s</string>
 </resources>

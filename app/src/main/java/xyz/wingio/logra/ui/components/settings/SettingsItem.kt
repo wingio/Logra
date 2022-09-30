@@ -39,7 +39,11 @@ fun SettingItem(
             ) {
                 text()
             }
-            ProvideTextStyle(MaterialTheme.typography.bodyMedium) {
+            ProvideTextStyle(
+                MaterialTheme.typography.bodyMedium.copy(
+                    color = MaterialTheme.colorScheme.onSurface.copy(0.6f)
+                )
+            ) {
                 secondaryText()
             }
         }

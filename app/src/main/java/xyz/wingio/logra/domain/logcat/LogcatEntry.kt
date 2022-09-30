@@ -11,7 +11,6 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import org.koin.androidx.compose.get
 import xyz.wingio.logra.domain.manager.PreferenceManager
-import xyz.wingio.logra.utils.Utils.cleanLine
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.regex.Pattern
@@ -54,9 +53,9 @@ data class LogcatEntry(
             Pattern.MULTILINE
         )
 
-        fun fromLine(line: String): LogcatEntry? = with(line) {
+        fun fromLine(line: String, trim: Boolean = true): LogcatEntry? = with(line) {
 
-            val parsed = logcatRegex.matcher(line.cleanLine())
+            val parsed = logcatRegex.matcher(line)
 
             if (!parsed.find()) return@with null
 
@@ -71,9 +70,9 @@ data class LogcatEntry(
                 createdAt = Date("$secs$millis".toLong()),
                 pid = pid?.toInt() ?: 0,
                 level = LogLevel.values().first { it.name.startsWith(level ?: "S") },
-                tag = tag?.trim() ?: "",
-                content = content?.trim() ?: "",
-                raw = line.trim()
+                tag = (if (trim) tag?.trim() else tag) ?: "",
+                content = (if (trim) content?.trim() else content) ?: "",
+                raw = if (trim) line.trim() else line
             )
         }
     }

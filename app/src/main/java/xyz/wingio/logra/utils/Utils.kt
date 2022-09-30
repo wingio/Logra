@@ -1,23 +1,17 @@
 package xyz.wingio.logra.utils
 
 import android.app.Activity
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.widget.Toast
+import xyz.wingio.logra.BuildConfig
 import xyz.wingio.logra.domain.logcat.LogcatEntry
 import xyz.wingio.logra.domain.logcat.filter.Filter
-import java.io.BufferedWriter
 
 object Utils {
     var textToSave = ""
-
-    fun String.cleanLine() = replace(" {2,}".toRegex(), "")
-
-    private fun BufferedWriter.writeCmd(cmd: String) {
-        write(cmd)
-        newLine()
-        flush()
-    }
 
     context(Context)
     fun showToast(text: String) {
@@ -44,10 +38,21 @@ object Utils {
         if (!contains(item)) add(item)
     }
 
+    fun Context.copyText(text: CharSequence) {
+        val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        clipboard.setPrimaryClip(
+            ClipData.newPlainText(
+                BuildConfig.APPLICATION_ID,
+                text
+            )
+        )
+    }
+
     fun Context.shareText(text: CharSequence) = Intent(Intent.ACTION_SEND).apply {
         putExtra(Intent.EXTRA_TEXT, text)
         type = "text/plain"
         Intent.createChooser(this, null).also {
+            it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             this@shareText.startActivity(it)
         }
     }
@@ -63,5 +68,4 @@ object Utils {
 
             (this@saveText as Activity).startActivityForResult(this, 1)
         }
-
 }

@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 fun SettingsSwitch(
     modifier: Modifier = Modifier,
     label: String,
+    secondaryLabel: String? = null,
     disabled: Boolean = false,
     pref: Boolean,
     onPrefChange: (Boolean) -> Unit,
@@ -17,6 +18,11 @@ fun SettingsSwitch(
     SettingItem(
         modifier = Modifier.clickable(enabled = !disabled) { onPrefChange(!pref) },
         text = { Text(text = label) },
+        secondaryText = {
+            secondaryLabel?.let {
+                Text(text = it)
+            }
+        }
     ) {
         Switch(
             checked = pref,

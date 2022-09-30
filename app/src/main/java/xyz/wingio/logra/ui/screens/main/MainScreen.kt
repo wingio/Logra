@@ -4,10 +4,8 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
-import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.interaction.DragInteraction
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
@@ -15,7 +13,6 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.MoreVert
@@ -23,22 +20,20 @@ import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import org.koin.androidx.compose.getViewModel
 import xyz.wingio.logra.R
 import xyz.wingio.logra.ui.components.filter.FilterRow
 import xyz.wingio.logra.ui.components.filter.RoundedTextBox
+import xyz.wingio.logra.ui.screens.crashes.CrashesScreen
 import xyz.wingio.logra.ui.screens.settings.SettingsScreen
 import xyz.wingio.logra.ui.theme.logLineAlt
 import xyz.wingio.logra.ui.viewmodels.main.MainScreenViewModel
@@ -56,10 +51,14 @@ class MainScreen : Screen {
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     private fun Screen(
-        viewModel: MainScreenViewModel = getViewModel()
+        viewModel: MainScreenViewModel = getScreenModel()
     ) {
         val listState = rememberLazyListState()
-        val logs = runCatching { viewModel.filterLogs() }.getOrElse { viewModel.logs }
+        val logs by remember {
+            derivedStateOf {
+                viewModel.filterLogs()
+            }
+        }
 
         LaunchedEffect(Unit) {
             listState.interactionSource.interactions.collectLatest {
@@ -102,8 +101,7 @@ class MainScreen : Screen {
                         .weight(1f),
                 ) {
                     itemsIndexed(
-                        logs,
-                        key = { i, log -> "$i${log.hashCode()}" }
+                        logs
                     ) { i, it ->
                         if (viewModel.prefs.compact)
                             Text(
@@ -226,6 +224,7 @@ class MainScreen : Screen {
                         }
                     )
 
+                    //Save logs to file
                     DropdownMenuItem(
                         text = { Text(text = stringResource(id = R.string.save)) },
                         onClick = {
@@ -238,6 +237,11 @@ class MainScreen : Screen {
                                 "Logcat ${SimpleDateFormat("M/dd/yy H:mm:ss.SSS").format(Date())}"
                             )
                         }
+                    )
+
+                    DropdownMenuItem(
+                        text = { Text(text = stringResource(id = R.string.crashes)) },
+                        onClick = { navigator?.push(CrashesScreen()); menuOpened = false }
                     )
 
                     // Go to settings

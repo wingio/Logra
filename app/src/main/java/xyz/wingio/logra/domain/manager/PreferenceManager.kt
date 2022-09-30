@@ -16,6 +16,7 @@ class PreferenceManager(context: Context) :
 
     var theme by enumPreference("theme", Theme.SYSTEM)
 
+    var crashDetectorEnabled by booleanPreference("crash_detector_enabled", false)
 }
 
 enum class Theme {
