@@ -61,6 +61,9 @@ fun FilterRow(
             IconButton(
                 onClick = { newFilterDDOpened = true }
             ) { Icon(imageVector = Icons.Filled.Add, contentDescription = "New Filter") }
+            NewFilterDropdown(expanded = newFilterDDOpened, filter) {
+                newFilterDDOpened = false
+            }
         }
 
         if (showDivider) Box(
@@ -115,9 +118,7 @@ fun FilterRow(
             }
         }
 
-        NewFilterDropdown(expanded = newFilterDDOpened, filter) {
-            newFilterDDOpened = false
-        }
+
 
     }
 
@@ -137,26 +138,28 @@ private fun NewFilterDropdown(
         mutableStateOf(false)
     }
 
-    DropdownMenu(expanded, onDismissRequest, offset = DpOffset(35.dp, 0.dp)) {
-        DropdownMenuItem(
-            text = { Text(stringResource(R.string.level)) },
-            onClick = { onDismissRequest(); levelOpened = true },
-            enabled = filter.levels.size != LogLevel.values().size
-        )
-        DropdownMenuItem(
-            text = { Text(stringResource(R.string.tag)) },
-            onClick = { onDismissRequest(); tagOpened = true },
-        )
-        DropdownMenuItem(
-            text = { Text(stringResource(R.string.before)) },
-            onClick = { onDismissRequest() },
-            enabled = false
-        )
-        DropdownMenuItem(
-            text = { Text(stringResource(R.string.after)) },
-            onClick = { onDismissRequest() },
-            enabled = false
-        )
+    Box {
+        DropdownMenu(expanded, onDismissRequest, offset = DpOffset((-78).dp, 45.dp)) {
+            DropdownMenuItem(
+                text = { Text(stringResource(R.string.level)) },
+                onClick = { onDismissRequest(); levelOpened = true },
+                enabled = filter.levels.size != LogLevel.values().size
+            )
+            DropdownMenuItem(
+                text = { Text(stringResource(R.string.tag)) },
+                onClick = { onDismissRequest(); tagOpened = true },
+            )
+            DropdownMenuItem(
+                text = { Text(stringResource(R.string.before)) },
+                onClick = { onDismissRequest() },
+                enabled = false
+            )
+            DropdownMenuItem(
+                text = { Text(stringResource(R.string.after)) },
+                onClick = { onDismissRequest() },
+                enabled = false
+            )
+        }
     }
 
     SettingsChoiceDialog(

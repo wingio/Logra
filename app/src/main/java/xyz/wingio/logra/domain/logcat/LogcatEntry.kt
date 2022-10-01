@@ -14,6 +14,7 @@ import xyz.wingio.logra.domain.manager.PreferenceManager
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.regex.Pattern
+import kotlin.random.Random
 
 data class LogcatEntry(
     val createdAt: Date,
@@ -21,7 +22,8 @@ data class LogcatEntry(
     val level: LogLevel,
     val tag: String,
     val content: String,
-    val raw: String
+    val raw: String,
+    private val key: String = Random.nextBytes(20).toString()
 ) {
 
     val annotated: AnnotatedString

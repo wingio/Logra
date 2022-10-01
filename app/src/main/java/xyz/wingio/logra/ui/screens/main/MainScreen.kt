@@ -70,17 +70,16 @@ class MainScreen : Screen {
             modifier = Modifier.fillMaxSize(),
             topBar = { Toolbar(viewModel) },
             floatingActionButton = { JumpFAB(viewModel, listState) },
-            bottomBar = {
-                SelectionPopup(viewModel.selectedLogs) {
-                    viewModel.selectedLogs.clear()
-                }
-            }
         ) { pad ->
 
             LaunchedEffect(logs.size) {
                 if (logs.isNotEmpty() && !viewModel.freeScroll.value) {
                     listState.animateScrollToItem(logs.lastIndex)
                 }
+            }
+
+            SelectionPopup(viewModel.selectedLogs) {
+                viewModel.selectedLogs.clear()
             }
 
             Column(
@@ -206,49 +205,51 @@ class MainScreen : Screen {
                     )
                 }
 
-                DropdownMenu(
-                    expanded = menuOpened,
-                    onDismissRequest = { menuOpened = false },
-                    offset = DpOffset(
-                        (-10).dp, 0.dp
-                    )
-                ) {
+                Box {
+                    DropdownMenu(
+                        expanded = menuOpened,
+                        onDismissRequest = { menuOpened = false },
+                        offset = DpOffset(
+                            10.dp, 26.dp
+                        )
+                    ) {
 
-                    // Clear logs
-                    DropdownMenuItem(
-                        text = { Text(text = "Clear") },
-                        onClick = {
-                            viewModel.logs.clear()
-                            viewModel.selectedLogs.clear()
-                            menuOpened = false
-                        }
-                    )
+                        // Clear logs
+                        DropdownMenuItem(
+                            text = { Text(text = "Clear") },
+                            onClick = {
+                                viewModel.logs.clear()
+                                viewModel.selectedLogs.clear()
+                                menuOpened = false
+                            }
+                        )
 
-                    //Save logs to file
-                    DropdownMenuItem(
-                        text = { Text(text = stringResource(id = R.string.save)) },
-                        onClick = {
-                            ctx.saveText(
-                                viewModel.logs
-                                    .sortedBy { it.createdAt }
-                                    .joinToString("\n") {
-                                        it.raw
-                                    },
-                                "Logcat ${SimpleDateFormat("M/dd/yy H:mm:ss.SSS").format(Date())}"
-                            )
-                        }
-                    )
+                        //Save logs to file
+                        DropdownMenuItem(
+                            text = { Text(text = stringResource(id = R.string.save)) },
+                            onClick = {
+                                ctx.saveText(
+                                    viewModel.logs
+                                        .sortedBy { it.createdAt }
+                                        .joinToString("\n") {
+                                            it.raw
+                                        },
+                                    "Logcat ${SimpleDateFormat("M/dd/yy H:mm:ss.SSS").format(Date())}"
+                                )
+                            }
+                        )
 
-                    DropdownMenuItem(
-                        text = { Text(text = stringResource(id = R.string.crashes)) },
-                        onClick = { navigator?.push(CrashesScreen()); menuOpened = false }
-                    )
+                        DropdownMenuItem(
+                            text = { Text(text = stringResource(id = R.string.crashes)) },
+                            onClick = { navigator?.push(CrashesScreen()); menuOpened = false }
+                        )
 
-                    // Go to settings
-                    DropdownMenuItem(
-                        text = { Text(text = "Settings") },
-                        onClick = { navigator?.push(SettingsScreen()); menuOpened = false }
-                    )
+                        // Go to settings
+                        DropdownMenuItem(
+                            text = { Text(text = "Settings") },
+                            onClick = { navigator?.push(SettingsScreen()); menuOpened = false }
+                        )
+                    }
                 }
             }
         )

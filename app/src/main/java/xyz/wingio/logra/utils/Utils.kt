@@ -68,4 +68,6 @@ object Utils {
 
             (this@saveText as Activity).startActivityForResult(this, 1)
         }
+
+    operator fun String.times(i: Int): String = repeat(i)
 }
