@@ -5,7 +5,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.outlined.Balance
+import androidx.compose.material.icons.outlined.Help
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -30,6 +32,8 @@ class AboutScreen : Screen {
     @OptIn(ExperimentalMaterial3Api::class)
     fun Screen() {
         val ctx = LocalContext.current
+        val uriHandler = LocalUriHandler.current
+
         Scaffold(
             modifier = Modifier.fillMaxSize(),
             topBar = { Toolbar() }
@@ -52,7 +56,45 @@ class AboutScreen : Screen {
                         }
                     }
                 )
-                val uriHandler = LocalUriHandler.current
+
+                SettingItem(
+                    icon = {
+                        Icon(
+                            Icons.Outlined.Help,
+                            contentDescription = ""
+                        )
+                    },
+                    text = { Text(stringResource(R.string.help)) },
+                    secondaryText = { Text(stringResource(R.string.help_description)) },
+                    modifier = Modifier.clickable {
+                        uriHandler.openUri("https://discord.gg/c3dJ2t7KRW")
+                    }
+                )
+
+                SettingItem(
+                    icon = {
+                        Icon(
+                            Icons.Outlined.Balance,
+                            contentDescription = stringResource(R.string.license)
+                        )
+                    },
+                    text = { Text(stringResource(R.string.license)) },
+                    secondaryText = { Text("GNU General Public License v2.0") }
+                )
+
+                SettingItem(
+                    icon = {
+                        Icon(
+                            Icons.Filled.FavoriteBorder,
+                            contentDescription = ""
+                        )
+                    },
+                    text = { Text(stringResource(R.string.support_me)) },
+                    modifier = Modifier.clickable {
+                        uriHandler.openUri("https://github.com/sponsors/wingio")
+                    }
+                )
+
                 SettingItem(
                     icon = {
                         Icon(

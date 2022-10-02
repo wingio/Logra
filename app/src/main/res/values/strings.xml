@@ -35,4 +35,8 @@
     <string name="crash">Crash</string>
     <string name="delete">Delete</string>
     <string name="crash_info">From %s (%s) at %s</string>
+    <string name="support_me">Sponsor me on GitHub</string>
+    <string name="license">License</string>
+    <string name="help">Get help on Discord</string>
+    <string name="help_description">Check out the #logra channel</string>
 </resources>
