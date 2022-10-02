@@ -69,7 +69,7 @@ class MainScreen : Screen {
         Scaffold(
             modifier = Modifier.fillMaxSize(),
             topBar = { Toolbar(viewModel) },
-            floatingActionButton = { JumpFAB(viewModel, listState) },
+            floatingActionButton = { JumpFAB(viewModel, listState, logs.lastIndex) }
         ) { pad ->
 
             LaunchedEffect(logs.size) {
@@ -100,7 +100,8 @@ class MainScreen : Screen {
                         .weight(1f),
                 ) {
                     itemsIndexed(
-                        logs
+                        logs,
+                        key = { _, log -> log.hashCode() }
                     ) { i, it ->
                         if (viewModel.prefs.compact)
                             Text(
@@ -124,7 +125,8 @@ class MainScreen : Screen {
     @OptIn(ExperimentalAnimationApi::class)
     private fun JumpFAB(
         viewModel: MainScreenViewModel,
-        listState: LazyListState
+        listState: LazyListState,
+        lastIndex: Int
     ) {
         val scope = rememberCoroutineScope()
         AnimatedVisibility(
@@ -136,7 +138,7 @@ class MainScreen : Screen {
                 onClick = {
                     viewModel.freeScroll.value = false
                     scope.launch {
-                        if (viewModel.logs.isNotEmpty()) listState.animateScrollToItem(viewModel.logs.lastIndex)
+                        if (lastIndex >= 0) listState.animateScrollToItem(lastIndex)
                     }
                 },
                 shape = RoundedCornerShape(8.dp)
@@ -176,6 +178,7 @@ class MainScreen : Screen {
             },
             actions = {
                 Spacer(modifier = Modifier.width(10.dp))
+
                 // Open filter dialog
                 IconButton(onClick = {
                     viewModel.filterOpened.value = !viewModel.filterOpened.value
@@ -239,6 +242,7 @@ class MainScreen : Screen {
                             }
                         )
 
+                        // Go to crashes screen
                         DropdownMenuItem(
                             text = { Text(text = stringResource(id = R.string.crashes)) },
                             onClick = { navigator?.push(CrashesScreen()); menuOpened = false }

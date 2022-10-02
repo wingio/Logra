@@ -70,4 +70,10 @@ object Utils {
         }
 
     operator fun String.times(i: Int): String = repeat(i)
+
+    fun <T> List<T>.getSafelyOrNull(index: Int): T? = try {
+        getOrNull(index)
+    } catch (e: Throwable) {
+        null
+    }
 }

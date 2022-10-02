@@ -51,6 +51,11 @@ class SettingsScreen : Screen {
 
                 SettingsSwitch(label = "Line Wrap", pref = prefs.lineWrap) { prefs.lineWrap = it }
                 SettingsSwitch(label = "Compact Mode", pref = prefs.compact) { prefs.compact = it }
+                SettingsSwitch(
+                    label = "Dump logs at startup",
+                    secondaryLabel = "Improves startup time",
+                    pref = prefs.dumpLogs
+                ) { prefs.dumpLogs = it }
 
                 SettingsHeader(text = "Theme")
 

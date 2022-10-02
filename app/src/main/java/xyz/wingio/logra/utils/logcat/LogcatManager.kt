@@ -1,24 +1,26 @@
 package xyz.wingio.logra.utils.logcat
 
-import android.Manifest
 import android.os.Build
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import xyz.wingio.logra.BuildConfig
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import xyz.wingio.logra.domain.logcat.LogcatEntry
+import xyz.wingio.logra.domain.manager.PreferenceManager
 import xyz.wingio.logra.utils.Logger
 import java.io.BufferedReader
 import kotlin.concurrent.thread
-import kotlin.math.log
 
-object LogcatManager {
+object LogcatManager : KoinComponent {
 
     private const val command = "logcat -v epoch"
+    private val prefs: PreferenceManager by inject()
 
     private lateinit var reader: BufferedReader
     private lateinit var proc: Process
 
     fun connect() {
+        if (prefs.dumpLogs) Runtime.getRuntime().exec("logcat -c").waitFor()
         proc = Runtime.getRuntime().exec(command)
         reader = proc.inputStream.bufferedReader()
     }
@@ -30,11 +32,8 @@ object LogcatManager {
                     connect(); continue
                 }
                 reader.forEachLine {
-                    try {
-                        val ent = LogcatEntry.fromLine(it)
-                        ent?.let(callback)
-                    } catch (th: Throwable) {
-                    }
+                    val ent = LogcatEntry.fromLine(it)
+                    ent?.let(callback)
                 }
             }
         }

@@ -9,6 +9,7 @@ import kotlinx.coroutines.launch
 import xyz.wingio.logra.domain.logcat.LogcatEntry
 import xyz.wingio.logra.domain.logcat.filter.Filter
 import xyz.wingio.logra.domain.manager.PreferenceManager
+import xyz.wingio.logra.utils.Utils.getSafelyOrNull
 import xyz.wingio.logra.utils.Utils.matches
 import xyz.wingio.logra.utils.logcat.LogcatManager
 
@@ -41,10 +42,12 @@ class MainScreenViewModel(
     }
 
     fun filterLogs(): List<LogcatEntry> {
-        return runCatching {
-            logs.matches(filter.value)
-        }.getOrElse { logs }
+        val newList = mutableListOf<LogcatEntry>()
+        for (i in 0 until logs.lastIndex) {
+            val item = logs.getSafelyOrNull(i) ?: continue
+            if (!item.matches(filter.value)) continue
+            newList.add(item)
+        }
+        return newList
     }
-
-
 }
