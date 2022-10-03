@@ -62,7 +62,7 @@ class MainScreen : Screen {
 
         LaunchedEffect(Unit) {
             listState.interactionSource.interactions.collectLatest {
-                if (it is DragInteraction.Start) viewModel.freeScroll.value = true
+                if (it is DragInteraction.Start) viewModel.freeScroll = true
             }
         }
 
@@ -73,7 +73,7 @@ class MainScreen : Screen {
         ) { pad ->
 
             LaunchedEffect(logs.size) {
-                if (logs.isNotEmpty() && !viewModel.freeScroll.value) {
+                if (logs.isNotEmpty() && !viewModel.freeScroll) {
                     listState.animateScrollToItem(logs.lastIndex)
                 }
             }
@@ -86,8 +86,8 @@ class MainScreen : Screen {
                 Modifier
                     .padding(pad)
             ) {
-                AnimatedVisibility(visible = viewModel.filterOpened.value) {
-                    FilterRow(oldFilter = viewModel.filter.value)
+                AnimatedVisibility(visible = viewModel.filterOpened) {
+                    FilterRow(oldFilter = viewModel.filter)
                 }
                 LazyColumn(
                     state = listState,
@@ -130,13 +130,13 @@ class MainScreen : Screen {
     ) {
         val scope = rememberCoroutineScope()
         AnimatedVisibility(
-            visible = viewModel.freeScroll.value && viewModel.selectedLogs.isEmpty(),
+            visible = viewModel.freeScroll && viewModel.selectedLogs.isEmpty(),
             enter = scaleIn(),
             exit = scaleOut()
         ) {
             SmallFloatingActionButton(
                 onClick = {
-                    viewModel.freeScroll.value = false
+                    viewModel.freeScroll = false
                     scope.launch {
                         if (lastIndex >= 0) listState.animateScrollToItem(lastIndex)
                     }
@@ -163,7 +163,7 @@ class MainScreen : Screen {
         }
 
         var searchText by remember {
-            mutableStateOf(viewModel.filter.value.text)
+            mutableStateOf(viewModel.filter.text)
         }
 
         TopAppBar(
@@ -173,7 +173,7 @@ class MainScreen : Screen {
                     placeholder = stringResource(id = R.string.search)
                 ) {
                     searchText = it
-                    viewModel.filter.value.text = it
+                    viewModel.filter.text = it
                 }
             },
             actions = {
@@ -181,7 +181,7 @@ class MainScreen : Screen {
 
                 // Open filter dialog
                 IconButton(onClick = {
-                    viewModel.filterOpened.value = !viewModel.filterOpened.value
+                    viewModel.filterOpened = !viewModel.filterOpened
                 }) {
                     Icon(
                         painterResource(R.drawable.ic_filter_24),
@@ -190,8 +190,8 @@ class MainScreen : Screen {
                 }
 
                 // Pause/Unpause logs
-                IconButton(onClick = { viewModel.paused.value = !viewModel.paused.value }) {
-                    if (viewModel.paused.value)
+                IconButton(onClick = { viewModel.paused = !viewModel.paused }) {
+                    if (viewModel.paused)
                         Icon(Icons.Filled.PlayArrow, contentDescription = "Unpause logs")
                     else
                         Icon(

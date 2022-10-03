@@ -1,7 +1,9 @@
 package xyz.wingio.logra.ui.viewmodels.main
 
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import cafe.adriel.voyager.core.model.ScreenModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -17,11 +19,11 @@ class MainScreenViewModel(
     val prefs: PreferenceManager
 ) : ScreenModel {
 
-    val paused = mutableStateOf(false)
-    val freeScroll = mutableStateOf(false)
-    val filterOpened = mutableStateOf(false)
+    var paused by mutableStateOf(false)
+    var freeScroll by mutableStateOf(false)
+    var filterOpened by mutableStateOf(false)
     val selectedLogs = mutableStateListOf<LogcatEntry>()
-    var filter = mutableStateOf(Filter())
+    var filter by mutableStateOf(Filter())
     var logs = mutableStateListOf<LogcatEntry>()
 
     private val scope = CoroutineScope(Dispatchers.IO)
@@ -30,7 +32,7 @@ class MainScreenViewModel(
     init {
         scope.launch(Dispatchers.IO) {
             LogcatManager.listen {
-                if (paused.value)
+                if (paused)
                     pausedLogs.add(it)
                 else {
                     logs.addAll(pausedLogs)
@@ -45,7 +47,7 @@ class MainScreenViewModel(
         val newList = mutableListOf<LogcatEntry>()
         for (i in 0 until logs.lastIndex) {
             val item = logs.getSafelyOrNull(i) ?: continue
-            if (!item.matches(filter.value)) continue
+            if (!item.matches(filter)) continue
             newList.add(item)
         }
         return newList
