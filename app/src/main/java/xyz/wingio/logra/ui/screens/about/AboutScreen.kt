@@ -5,8 +5,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
-import androidx.compose.material.icons.outlined.Balance
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.outlined.Feed
 import androidx.compose.material.icons.outlined.Help
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.*
@@ -74,7 +75,7 @@ class AboutScreen : Screen {
                 SettingItem(
                     icon = {
                         Icon(
-                            Icons.Outlined.Balance,
+                            Icons.Outlined.Feed,
                             contentDescription = stringResource(R.string.license)
                         )
                     },

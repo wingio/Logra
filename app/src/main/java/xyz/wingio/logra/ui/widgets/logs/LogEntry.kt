@@ -10,6 +10,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -21,14 +22,16 @@ import xyz.wingio.logra.domain.manager.PreferenceManager
 import xyz.wingio.logra.utils.Utils.addUnique
 import java.text.SimpleDateFormat
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun LogEntry(
     log: LogcatEntry,
     prefs: PreferenceManager = get(),
-    selected: MutableList<LogcatEntry> = mutableListOf()
+    selected: MutableList<LogcatEntry> = mutableListOf(),
+    demoColor: Color? = null
 ) {
     val isSelected = selected.contains(log)
+    val logColor = demoColor ?: log.level.color
 
     ElevatedCard(
         colors = CardDefaults.elevatedCardColors(
@@ -37,11 +40,11 @@ fun LogEntry(
     ) {
         Box(
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxWidth()
                 .drawWithCache {
                     onDrawBehind {
                         drawRect(
-                            color = log.level.color,
+                            color = logColor,
                             topLeft = Offset.Zero,
                             size = Size(12f, size.height),
                         )

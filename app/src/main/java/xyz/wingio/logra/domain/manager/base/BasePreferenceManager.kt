@@ -4,6 +4,7 @@ import android.content.SharedPreferences
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.Color
 import androidx.core.content.edit
 import kotlin.reflect.KProperty
 
@@ -16,6 +17,11 @@ abstract class BasePreferenceManager(
     private fun getBoolean(key: String, defaultValue: Boolean) = prefs.getBoolean(key, defaultValue)
     private fun getInt(key: String, defaultValue: Int) = prefs.getInt(key, defaultValue)
     private fun getFloat(key: String, defaultValue: Float) = prefs.getFloat(key, defaultValue)
+    private fun getColor(key: String, defaultValue: Color): Color {
+        val c = prefs.getString(key, null)
+        return if (c == null) defaultValue else Color(c.toULong())
+    }
+
     protected inline fun <reified E : Enum<E>> getEnum(key: String, defaultValue: E) =
         enumValueOf<E>(getString(key, defaultValue.name))
 
@@ -23,6 +29,9 @@ abstract class BasePreferenceManager(
     private fun putBoolean(key: String, value: Boolean) = prefs.edit { putBoolean(key, value) }
     private fun putInt(key: String, value: Int) = prefs.edit { putInt(key, value) }
     private fun putFloat(key: String, value: Float) = prefs.edit { putFloat(key, value) }
+    private fun putColor(key: String, value: Color) =
+        prefs.edit { putString(key, value.value.toString()) }
+
     protected inline fun <reified E : Enum<E>> putEnum(key: String, value: E) =
         putString(key, value.name)
 
@@ -82,6 +91,17 @@ abstract class BasePreferenceManager(
         getter = ::getFloat,
         setter = ::putFloat
     )
+
+    protected fun colorPreference(
+        key: String,
+        defaultValue: Color
+    ) = Preference(
+        key = key,
+        defaultValue = defaultValue,
+        getter = ::getColor,
+        setter = ::putColor
+    )
+
 
     protected inline fun <reified E : Enum<E>> enumPreference(
         key: String,

@@ -1,6 +1,5 @@
 package xyz.wingio.logra.ui.components.filter
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -37,8 +37,7 @@ fun RoundedTextBox (
             .fillMaxWidth()
             .clip(
                 RoundedCornerShape(200.dp)
-            )
-            .background(MaterialTheme.colorScheme.surfaceColorAtElevation(10.dp)),
+            ),
         decorationBox = { innerTextField ->
             TextFieldDefaults.TextFieldDecorationBox(
                 value = text,
@@ -63,6 +62,11 @@ fun RoundedTextBox (
                     end = 12.dp,
                     top = 10.dp,
                     bottom = 10.dp
+                ),
+                colors = TextFieldDefaults.textFieldColors(
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                    containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(5.dp)
                 )
             )
         }

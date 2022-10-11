@@ -39,4 +39,11 @@
     <string name="license">License</string>
     <string name="help">Get help on Discord</string>
     <string name="help_description">Check out the #logra channel</string>
+    <string name="demo_log_text">This is a preview log</string>
+    <string name="l_verbose">Verbose</string>
+    <string name="l_info">Info</string>
+    <string name="l_debug">Debug</string>
+    <string name="l_warn">Warning</string>
+    <string name="l_error">Error</string>
+    <string name="l_fatal">Fatal</string>
 </resources>

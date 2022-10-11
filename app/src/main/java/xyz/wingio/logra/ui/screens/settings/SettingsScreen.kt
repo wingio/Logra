@@ -1,12 +1,14 @@
 package xyz.wingio.logra.ui.screens.settings
 
 import android.os.Build
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -21,10 +23,7 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import org.koin.androidx.compose.get
 import xyz.wingio.logra.R
 import xyz.wingio.logra.domain.manager.PreferenceManager
-import xyz.wingio.logra.ui.components.settings.SettingsHeader
-import xyz.wingio.logra.ui.components.settings.SettingsItemChoice
-import xyz.wingio.logra.ui.components.settings.SettingsSwitch
-import xyz.wingio.logra.ui.components.settings.SettingsTextField
+import xyz.wingio.logra.ui.components.settings.*
 import xyz.wingio.logra.ui.screens.about.AboutScreen
 import java.text.SimpleDateFormat
 import java.util.*
@@ -39,6 +38,8 @@ class SettingsScreen : Screen {
     private fun Screen(
         prefs: PreferenceManager = get()
     ) {
+        val navigator = LocalNavigator.current
+
         Scaffold(
             Modifier.fillMaxSize(),
             topBar = { Toolbar() }
@@ -69,6 +70,17 @@ class SettingsScreen : Screen {
                     label = "Theme",
                     pref = prefs.theme,
                     onPrefChange = { prefs.theme = it })
+
+                SettingItem(
+                    modifier = Modifier.clickable {
+                        navigator?.push(ColorSettingsScreen())
+                    },
+                    text = {
+                        Text(text = "Colors")
+                    }
+                ) {
+                    Icon(Icons.Filled.ChevronRight, "")
+                }
 
                 SettingsHeader(text = "Advanced")
 

@@ -1,6 +1,12 @@
 package xyz.wingio.logra.utils
 
 import android.os.SystemClock
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
+import xyz.wingio.logra.R
+import xyz.wingio.logra.domain.logcat.LogLevel
+import xyz.wingio.logra.domain.logcat.LogcatEntry
+import java.util.*
 
 val BOOT_TIME = System.currentTimeMillis() - SystemClock.uptimeMillis()
 
@@ -25,3 +31,13 @@ object Channels {
     const val CRASH_DETECTOR = "logra.channels.CRASH_DETECTOR"
     const val CRASH_DETECTOR_STATUS = "logra.channels.CRASH_DETECTOR_STATUS"
 }
+
+val DEMO_LOG
+    @Composable get() = LogcatEntry(
+        Date(),
+        0,
+        LogLevel.WARNING,
+        stringResource(id = R.string.app_name),
+        content = stringResource(id = R.string.demo_log_text),
+        raw = ""
+    )
