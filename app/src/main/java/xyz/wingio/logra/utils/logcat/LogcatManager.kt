@@ -8,6 +8,7 @@ import org.koin.core.component.inject
 import xyz.wingio.logra.domain.logcat.LogcatEntry
 import xyz.wingio.logra.domain.manager.PreferenceManager
 import xyz.wingio.logra.utils.Logger
+import xyz.wingio.logra.utils.mainThread
 import java.io.BufferedReader
 import kotlin.concurrent.thread
 
@@ -33,7 +34,9 @@ object LogcatManager : KoinComponent {
                 }
                 reader.forEachLine {
                     val ent = LogcatEntry.fromLine(it)
-                    ent?.let(callback)
+                    mainThread.post {
+                        ent?.let(callback)
+                    }
                 }
             }
         }

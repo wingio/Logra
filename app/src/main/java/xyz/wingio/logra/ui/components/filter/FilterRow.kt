@@ -24,15 +24,9 @@ import xyz.wingio.logra.utils.Utils.capitalizedName
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FilterRow(
-    oldFilter: Filter
+    filter: Filter
 ) {
     val scrollState = rememberScrollState()
-
-    val filter by remember(oldFilter) {
-        derivedStateOf {
-            oldFilter
-        }
-    }
 
     var newFilterDDOpened by remember {
         mutableStateOf(false)
@@ -51,11 +45,7 @@ fun FilterRow(
         ) {
             IconButton(
                 onClick = {
-                    val defaultFilter = Filter()
-                    filter.apply {
-                        levels = defaultFilter.levels
-                        tags = defaultFilter.tags
-                    }
+                    filter.reset()
                 }
             ) { Icon(imageVector = Icons.Filled.Refresh, contentDescription = "Reset") }
             IconButton(

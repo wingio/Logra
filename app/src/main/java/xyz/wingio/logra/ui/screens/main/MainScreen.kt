@@ -72,7 +72,7 @@ class MainScreen : Screen {
             floatingActionButton = { JumpFAB(viewModel, listState, logs.lastIndex) }
         ) { pad ->
 
-            LaunchedEffect(logs.size) {
+            LaunchedEffect(logs) {
                 if (logs.isNotEmpty() && !viewModel.freeScroll) {
                     listState.animateScrollToItem(logs.lastIndex)
                 }
@@ -87,7 +87,7 @@ class MainScreen : Screen {
                     .padding(pad)
             ) {
                 AnimatedVisibility(visible = viewModel.filterOpened) {
-                    FilterRow(oldFilter = viewModel.filter)
+                    FilterRow(filter = viewModel.filter)
                 }
                 LazyColumn(
                     state = listState,
@@ -162,22 +162,19 @@ class MainScreen : Screen {
             mutableStateOf(false)
         }
 
-        var searchText by remember {
-            mutableStateOf(viewModel.filter.text)
-        }
-
         TopAppBar(
             title = {
-                RoundedTextBox (
-                    text = searchText,
+                RoundedTextBox(
+                    text = viewModel.filter.text,
                     placeholder = stringResource(id = R.string.search)
                 ) {
-                    searchText = it
                     viewModel.filter.text = it
                 }
             },
             actions = {
                 Spacer(modifier = Modifier.width(10.dp))
+
+//                Text(viewModel.logs.lastIndex.toString())
 
                 // Open filter dialog
                 IconButton(onClick = {

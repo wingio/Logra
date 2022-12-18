@@ -3,6 +3,7 @@ package xyz.wingio.logra.domain.logcat
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -12,10 +13,11 @@ import androidx.compose.ui.unit.dp
 import org.koin.androidx.compose.get
 import xyz.wingio.logra.domain.manager.PreferenceManager
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
 import java.util.regex.Pattern
 import kotlin.random.Random
 
+@Stable
 data class LogcatEntry(
     val createdAt: Date,
     val pid: Int,

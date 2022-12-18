@@ -2,12 +2,14 @@ package xyz.wingio.logra.domain.logcat
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
 import androidx.compose.ui.graphics.Color
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import xyz.wingio.logra.domain.manager.PreferenceManager
 import xyz.wingio.logra.domain.manager.Theme
 
+@Stable
 enum class LogLevel : KoinComponent {
     VERBOSE,
     DEBUG,

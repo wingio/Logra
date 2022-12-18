@@ -5,12 +5,16 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
+import android.os.Handler
+import android.os.Looper
 import android.widget.Toast
 import androidx.compose.ui.graphics.Color
 import xyz.wingio.logra.BuildConfig
 import xyz.wingio.logra.domain.logcat.LogcatEntry
 import xyz.wingio.logra.domain.logcat.filter.Filter
-import java.util.*
+import java.util.Locale
+
+val mainThread = Handler(Looper.getMainLooper())
 
 object Utils {
     var textToSave = ""
