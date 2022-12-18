@@ -174,8 +174,6 @@ class MainScreen : Screen {
             actions = {
                 Spacer(modifier = Modifier.width(10.dp))
 
-//                Text(viewModel.logs.lastIndex.toString())
-
                 // Open filter dialog
                 IconButton(onClick = {
                     viewModel.filterOpened = !viewModel.filterOpened

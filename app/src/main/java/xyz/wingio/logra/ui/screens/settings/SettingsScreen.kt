@@ -5,7 +5,9 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.ClickableText
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ChevronRight
@@ -13,6 +15,7 @@ import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.*
@@ -39,13 +42,18 @@ class SettingsScreen : Screen {
         prefs: PreferenceManager = get()
     ) {
         val navigator = LocalNavigator.current
+        val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
         Scaffold(
-            Modifier.fillMaxSize(),
-            topBar = { Toolbar() }
+            Modifier
+                .fillMaxSize()
+                .nestedScroll(scrollBehavior.nestedScrollConnection),
+            topBar = { Toolbar(scrollBehavior) }
         ) { paddingValues ->
             Column(
-                Modifier.padding(paddingValues)
+                Modifier
+                    .padding(paddingValues)
+                    .verticalScroll(rememberScrollState())
             ) {
 
                 SettingsHeader(text = "General")
@@ -142,12 +150,15 @@ class SettingsScreen : Screen {
 
     @Composable
     @OptIn(ExperimentalMaterial3Api::class)
-    private fun Toolbar() {
+    private fun Toolbar(
+        scrollBehavior: TopAppBarScrollBehavior
+    ) {
 
         val navigator = LocalNavigator.current
 
         LargeTopAppBar(
             title = { Text("Settings") },
+            scrollBehavior = scrollBehavior,
             actions = {
                 IconButton(onClick = { navigator?.push(AboutScreen()) }) {
                     Icon(Icons.Outlined.Info, stringResource(R.string.about))

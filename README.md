@@ -7,7 +7,7 @@
   Material You logcat viewer for Android
   
   ---
-  ![Debug build status](https://img.shields.io/github/workflow/status/wingio/Logra/Build%20Debug/main?label=Debug%20Build&logo=github&style=for-the-badge)
+  ![Debug build status](https://img.shields.io/github/workflow/status/wingio/Logra/build-debug.yml?label=Debug%20Build&logo=github&style=for-the-badge&branch=main)
   [![Latest](https://img.shields.io/github/v/release/wingio/Logra?display_name=release&include_prereleases&label=Latest&style=for-the-badge)](https://github.com/wingio/Logra/releases/latest)
   [![GitHub downloads](https://img.shields.io/github/downloads/wingio/Logra/total?style=for-the-badge)](https://github.com/wingio/Logra/releases/latest)
   
