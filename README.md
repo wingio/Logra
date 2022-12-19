@@ -1,6 +1,6 @@
 <div align="center">
 
-  <img src="https://user-images.githubusercontent.com/44992537/180043970-42e49c39-2301-4ad1-a9b1-d049dee93ef3.png" alt="Logra logo" width="150px" />
+  <img src="/images/logo.png" alt="Logra logo" width="150px" />
   
   # Logra
   
