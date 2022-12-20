@@ -25,7 +25,6 @@ class MainScreenViewModel(
     var filter by mutableStateOf(Filter())
     var logs = mutableStateListOf<LogcatEntry>()
 
-    private val scope = CoroutineScope(Dispatchers.IO)
     private val pausedLogs = mutableListOf<LogcatEntry>()
 
     init {
@@ -33,27 +32,27 @@ class MainScreenViewModel(
             if (paused)
                 pausedLogs.add(it)
             else {
-                logs.addAll(pausedLogs)
+                addLogs(pausedLogs)
                 pausedLogs.clear()
                 addLog(it)
             }
         }
     }
 
-    fun addLog(entry: LogcatEntry) {
+    private fun addLog(entry: LogcatEntry) {
         if (logs.size > 10000) {
             logs.removeFirst()
         }
         logs.add(entry)
     }
 
-    fun filterLogs(): List<LogcatEntry> {
-        val newList = mutableListOf<LogcatEntry>()
-        for (i in 0 until logs.lastIndex) {
-            val item = logs.getSafelyOrNull(i) ?: continue
-            if (!item.matches(filter)) continue
-            newList.add(item)
+    private fun addLogs(entries: List<LogcatEntry>) {
+        entries.forEach {
+            addLog(it)
         }
-        return newList
+    }
+
+    fun filterLogs(): List<LogcatEntry> {
+        return logs.matches(filter)
     }
 }
