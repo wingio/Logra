@@ -20,7 +20,8 @@ android {
 
     buildTypes {
         named("release") {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
             setProguardFiles(listOf(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"))
         }
     }
@@ -44,6 +45,24 @@ android {
         compose = true
     }
 
+    androidComponents {
+        onVariants(selector().withBuildType("release")) {
+            it.packaging.resources.excludes.apply {
+                // Debug metadata
+                add("/**/*.version")
+                add("/kotlin-tooling-metadata.json")
+                // Kotlin debugging (https://github.com/Kotlin/kotlinx.coroutines/issues/2274)
+                add("/DebugProbesKt.bin")
+            }
+        }
+    }
+
+    packagingOptions {
+        resources {
+            // Reflection symbol list (https://stackoverflow.com/a/41073782/13964629)
+            excludes += "/**/*.kotlin_builtins"
+        }
+    }
 }
 
 dependencies {
