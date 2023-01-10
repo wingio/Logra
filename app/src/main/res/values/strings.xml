@@ -6,9 +6,12 @@
     <string name="source">Source</string>
     <string name="back">Back</string>
     <string name="search">Search</string>
+    <string name="search_by">Search By</string>
     <string name="filter">Filter</string>
     <string name="level">Level</string>
     <string name="tag">Tag</string>
+    <string name="pid">PID</string>
+    <string name="text">Text</string>
     <string name="before">Before</string>
     <string name="after">After</string>
     <string name="remove">Remove</string>

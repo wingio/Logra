@@ -36,8 +36,10 @@ object Utils {
         val levelMatches = filter.levels.contains(level)
         val tagMatches =
             filter.tags.isEmpty() || filter.tags.map { it.lowercase() }.contains(tag.lowercase())
+        val pidMatches =
+            filter.pids.isEmpty() || filter.pids.contains(pid)
 
-        return textMatches && levelMatches && tagMatches
+        return textMatches && levelMatches && tagMatches && pidMatches
     }
 
     fun <I> MutableList<I>.addUnique(item: I) {

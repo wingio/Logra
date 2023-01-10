@@ -78,7 +78,12 @@ class MainScreen : Screen {
                 }
             }
 
-            SelectionPopup(viewModel.selectedLogs) {
+            SelectionPopup(
+                selected = viewModel.selectedLogs,
+                onSearchText = viewModel::searchByText,
+                onSearchTag = viewModel::searchByTag,
+                onSearchPid = viewModel::searchByPid
+            ) {
                 viewModel.selectedLogs.clear()
             }
 

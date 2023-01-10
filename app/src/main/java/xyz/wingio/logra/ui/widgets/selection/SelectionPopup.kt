@@ -1,7 +1,6 @@
 package xyz.wingio.logra.ui.widgets.selection
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.core.*
 import androidx.compose.animation.slideIn
 import androidx.compose.animation.slideOut
@@ -10,50 +9,47 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CopyAll
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
 import xyz.wingio.logra.R
 import xyz.wingio.logra.domain.logcat.LogcatEntry
+import xyz.wingio.logra.utils.Utils.copyText
 import xyz.wingio.logra.utils.Utils.saveText
 import xyz.wingio.logra.utils.Utils.shareText
 import java.text.SimpleDateFormat
 import java.util.*
 
-fun slideInVertically(
-    animationSpec: FiniteAnimationSpec<IntOffset> =
-        spring(
-            stiffness = Spring.StiffnessMediumLow,
-            visibilityThreshold = IntOffset.VisibilityThreshold
-        ),
-    initialOffsetY: (fullHeight: Int) -> Int = { -it / 2 },
-): EnterTransition =
-    slideIn(
-        initialOffset = { IntOffset(0, initialOffsetY(it.height)) },
-        animationSpec = animationSpec
-    )
-
-
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun SelectionPopup(
     selected: List<LogcatEntry> = emptyList(),
-    onDismissRequest: (() -> Unit)?
+    onSearchText: () -> Unit,
+    onSearchTag: () -> Unit,
+    onSearchPid: () -> Unit,
+    onDismissRequest: (() -> Unit)?,
 ) {
     val ctx = LocalContext.current
     val animSpec = spring(
@@ -62,6 +58,9 @@ fun SelectionPopup(
     )
     val expandedState = remember {
         MutableTransitionState(false)
+    }
+    var searchByExpanded by remember {
+        mutableStateOf(false)
     }
     expandedState.targetState = selected.isNotEmpty()
 
@@ -135,6 +134,46 @@ fun SelectionPopup(
                                         }
                                 )
                             }
+                            SelectionPopupOption(icon = {
+                                Icon(
+                                    Icons.Filled.CopyAll,
+                                    stringResource(id = R.string.copy)
+                                )
+                            }) {
+                                ctx.copyText(
+                                    selected
+                                        .sortedBy { it.createdAt }
+                                        .joinToString("\n") {
+                                            it.raw
+                                        }
+                                )
+                            }
+                            Box {
+                                SearchByPopup(
+                                    searchByExpanded,
+                                    offset = DpOffset(
+                                        (-20).dp,
+                                        LocalConfiguration.current.screenHeightDp.dp - 300.dp
+                                    ),
+                                    onDismissRequest = {
+                                        searchByExpanded = false
+                                    },
+                                    onTextClick = onSearchText,
+                                    onTagClick = onSearchTag,
+                                    onPIDClick = onSearchPid
+                                )
+                            }
+                            SelectionPopupOption(
+                                icon = {
+                                    Icon(
+                                        Icons.Filled.Search,
+                                        stringResource(id = R.string.search)
+                                    )
+                                },
+                                onClick = {
+                                    searchByExpanded = true
+                                }
+                            )
                             SelectionPopupOption(icon = {
                                 Icon(
                                     painterResource(id = R.drawable.ic_save_24), stringResource(

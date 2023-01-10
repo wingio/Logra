@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Memory
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -18,6 +19,8 @@ import androidx.compose.ui.unit.dp
 import xyz.wingio.logra.R
 import xyz.wingio.logra.domain.logcat.LogLevel
 import xyz.wingio.logra.domain.logcat.filter.Filter
+import xyz.wingio.logra.ui.components.dropdown.Dropdown
+import xyz.wingio.logra.ui.components.dropdown.DropdownItem
 import xyz.wingio.logra.ui.components.settings.SettingsChoiceDialog
 import xyz.wingio.logra.utils.Utils.capitalizedName
 
@@ -91,6 +94,29 @@ fun FilterRow(
                 )
             }
 
+            filter.pids.forEach {
+                ElevatedAssistChip(
+                    onClick = {
+                        if (filter.pids.contains(it)) filter.pids.remove(it)
+                    },
+                    label = { Text(text = it.toString()) },
+                    leadingIcon = {
+                        Icon(
+                            Icons.Filled.Memory,
+                            stringResource(id = R.string.pid),
+                            modifier = Modifier.size(15.dp)
+                        )
+                    },
+                    trailingIcon = {
+                        Icon(
+                            painterResource(id = R.drawable.ic_clear_24),
+                            stringResource(id = R.string.remove),
+                            modifier = Modifier.size(15.dp)
+                        )
+                    }
+                )
+            }
+
             filter.levels.forEach {
                 ElevatedAssistChip(
                     onClick = {
@@ -128,23 +154,31 @@ private fun NewFilterDropdown(
         mutableStateOf(false)
     }
 
+    var pidOpened by remember {
+        mutableStateOf(false)
+    }
+
     Box {
-        DropdownMenu(expanded, onDismissRequest, offset = DpOffset((-78).dp, 45.dp)) {
-            DropdownMenuItem(
+        Dropdown(expanded, onDismissRequest, offset = DpOffset((-78).dp, 45.dp)) {
+            DropdownItem(
                 text = { Text(stringResource(R.string.level)) },
                 onClick = { onDismissRequest(); levelOpened = true },
                 enabled = filter.levels.size != LogLevel.values().size
             )
-            DropdownMenuItem(
+            DropdownItem(
                 text = { Text(stringResource(R.string.tag)) },
                 onClick = { onDismissRequest(); tagOpened = true },
             )
-            DropdownMenuItem(
+            DropdownItem(
+                text = { Text(stringResource(R.string.pid)) },
+                onClick = { onDismissRequest(); pidOpened = true }
+            )
+            DropdownItem(
                 text = { Text(stringResource(R.string.before)) },
                 onClick = { onDismissRequest() },
                 enabled = false
             )
-            DropdownMenuItem(
+            DropdownItem(
                 text = { Text(stringResource(R.string.after)) },
                 onClick = { onDismissRequest() },
                 enabled = false
@@ -162,10 +196,23 @@ private fun NewFilterDropdown(
         }
     )
 
-    TagInputDialog(
+    TextInputDialog(
         onDismissRequest = { tagOpened = false },
         onConfirm = { if (!filter.tags.contains(it)) filter.tags.add(it) },
-        visible = tagOpened
+        visible = tagOpened,
+        label = R.string.tag
+    )
+
+    TextInputDialog(
+        onDismissRequest = { pidOpened = false },
+        onConfirm = {
+            val pid = it.toIntOrNull()
+            pid?.let { pidInt ->
+                if (!filter.pids.contains(pidInt)) filter.pids.add(pidInt)
+            }
+        },
+        visible = pidOpened,
+        label = R.string.pid
     )
 
 }

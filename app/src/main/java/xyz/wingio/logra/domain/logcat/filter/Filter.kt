@@ -13,11 +13,11 @@ import java.time.LocalDate
 class Filter {
     var text by mutableStateOf("")
     var tags = mutableStateListOf<String>()
+    var pids = mutableStateListOf<Int>()
     var regex by mutableStateOf(false)
     var levels = LogLevel.values().toMutableList().toMutableStateList()
     var after by mutableStateOf(LocalDate.MIN)
     var before by mutableStateOf(LocalDate.MAX)
-
 
     fun reset() {
         regex = DEFAULT.regex

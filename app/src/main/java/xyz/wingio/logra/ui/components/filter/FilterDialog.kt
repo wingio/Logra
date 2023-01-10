@@ -1,5 +1,6 @@
 package xyz.wingio.logra.ui.components.filter
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.*
@@ -10,8 +11,9 @@ import xyz.wingio.logra.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TagInputDialog(
+fun TextInputDialog(
     visible: Boolean = false,
+    @StringRes label: Int = R.string.text,
     onDismissRequest: () -> Unit,
     onConfirm: (String) -> Unit
 ) {
@@ -25,14 +27,13 @@ fun TagInputDialog(
                 Text(stringResource(R.string.confirm))
             }
         },
-//        title = { Text(stringResource(R.string.tag)) },
         text = {
             Column {
                 OutlinedTextField(
                     modifier = Modifier.fillMaxWidth(),
                     value = text,
                     onValueChange = { text = it },
-                    label = { Text(stringResource(id = R.string.tag)) }
+                    label = { Text(stringResource(id = label)) }
                 )
             }
         }
