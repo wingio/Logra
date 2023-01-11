@@ -1,0 +1,52 @@
+<resources>
+    <string name="app_name">Logra</string>
+    <string name="confirm">Onayla</string>
+    <string name="about">Hakkında</string>
+    <string name="version">Sürüm</string>
+    <string name="source">Kaynak Kodu</string>
+    <string name="back">Geri</string>
+    <string name="search">Ara</string>
+    <string name="search_by">Buna Göre Ara</string>
+    <string name="filter">Filtre</string>
+    <string name="level">Seviye</string>
+    <string name="tag">Etiket</string>
+    <string name="pid">PID</string>
+    <string name="text">Metin</string>
+    <string name="before">Önce</string>
+    <string name="after">Sonra</string>
+    <string name="remove">Kaldır</string>
+    <plurals name="selected">
+        <item quantity="one">%d kayıt seçildi</item>
+        <item quantity="other">%d kayıt seçildi</item>
+    </plurals>
+    <string name="share">Paylaş</string>
+    <string name="copy">Kopyala</string>
+    <string name="save">Dosya'ya kaydet</string>
+    <string name="save_successful">Dosya başarıyla kaydedildi!</string>
+    <string name="save_failed">Dosya kaydedilemedi</string>
+    <string name="clear_slected">Seçilen'i temizle</string>
+    <string name="clear">Temizle</string>
+
+    <string-array name="crash_service_messages">
+        <item>Çökmeler için bekleniyor…</item>
+        <item>Bir göz atılıyor…</item>
+        <item>Vahşi çökmeler aranıyor…</item>
+        <item>Uygulamalarınızın çalıştığından emin olunuyor…</item>
+    </string-array>
+    <string name="stop">Durdur</string>
+    <string name="crashes">Çökmeler</string>
+    <string name="crash">Çökme</string>
+    <string name="delete">Sil</string>
+    <string name="crash_info"> %s 'den (%s) %s 'de</string>
+    <string name="support_me">GitHub'da Sponsor Ol</string>
+    <string name="license">Lisans</string>
+    <string name="help">Discord'ta yardım al</string>
+    <string name="help_description">#logra kanalına bak</string>
+    <string name="demo_log_text">Bu örnek bir kayıt</string>
+    <string name="l_verbose">Verbose</string>
+    <string name="l_info">Bilgi</string>
+    <string name="l_debug">Hata Ayıklama</string>
+    <string name="l_warn">Uyarı</string>
+    <string name="l_error">Hata</string>
+    <string name="l_fatal">Fatal</string>
+</resources>
