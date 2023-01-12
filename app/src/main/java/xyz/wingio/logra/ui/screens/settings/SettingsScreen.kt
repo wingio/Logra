@@ -90,6 +90,17 @@ class SettingsScreen : Screen {
                     Icon(Icons.Filled.ChevronRight, "")
                 }
 
+                SettingItem(
+                    modifier = Modifier.clickable {
+                        navigator?.push(IconSettingsScreen())
+                    },
+                    text = {
+                        Text(text = stringResource(R.string.settings_app_icon))
+                    }
+                ) {
+                    Icon(Icons.Filled.ChevronRight, "")
+                }
+
                 SettingsHeader(text = "Advanced")
 
                 SettingsTextField(

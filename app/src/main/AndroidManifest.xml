@@ -38,15 +38,140 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".crashdetector.services.CrashDetectionService" android:exported="false" />
+        <activity-alias
+            android:name=".icons.Legacy"
+            android:enabled="false"
+            android:exported="true"
+            android:icon="@drawable/ic_launcher_legacy"
+            android:label="@string/app_name"
+            android:roundIcon="@drawable/ic_launcher_legacy"
+            android:targetActivity=".MainActivity">
 
-        <receiver android:name=".crashdetector.receivers.CrashReceiver"
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="logra.actions.EXPORT_LOGS" />
+                <category android:name="android.intent.category.OPENABLE" />
+            </intent-filter>
+            <intent-filter android:exported="false">
+                <action android:name="logra.actions.VIEW_CRASH" />
+                <category android:name="android.intent.category.OPENABLE" />
+            </intent-filter>
+
+        </activity-alias>
+
+        <activity-alias
+            android:name=".icons.Nord"
+            android:enabled="false"
+            android:exported="true"
+            android:icon="@drawable/ic_launcher_nord"
+            android:label="@string/app_name"
+            android:roundIcon="@drawable/ic_launcher_nord"
+            android:targetActivity=".MainActivity">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="logra.actions.EXPORT_LOGS" />
+                <category android:name="android.intent.category.OPENABLE" />
+            </intent-filter>
+            <intent-filter android:exported="false">
+                <action android:name="logra.actions.VIEW_CRASH" />
+                <category android:name="android.intent.category.OPENABLE" />
+            </intent-filter>
+
+        </activity-alias>
+
+        <activity-alias
+            android:name=".icons.Mocha"
+            android:enabled="false"
+            android:exported="true"
+            android:icon="@drawable/ic_launcher_mocha"
+            android:label="@string/app_name"
+            android:roundIcon="@drawable/ic_launcher_mocha"
+            android:targetActivity=".MainActivity">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="logra.actions.EXPORT_LOGS" />
+                <category android:name="android.intent.category.OPENABLE" />
+            </intent-filter>
+            <intent-filter android:exported="false">
+                <action android:name="logra.actions.VIEW_CRASH" />
+                <category android:name="android.intent.category.OPENABLE" />
+            </intent-filter>
+
+        </activity-alias>
+
+        <activity-alias
+            android:name=".icons.Neon"
+            android:enabled="false"
+            android:exported="true"
+            android:icon="@drawable/ic_launcher_neon"
+            android:label="@string/app_name"
+            android:roundIcon="@drawable/ic_launcher_neon"
+            android:targetActivity=".MainActivity">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="logra.actions.EXPORT_LOGS" />
+                <category android:name="android.intent.category.OPENABLE" />
+            </intent-filter>
+            <intent-filter android:exported="false">
+                <action android:name="logra.actions.VIEW_CRASH" />
+                <category android:name="android.intent.category.OPENABLE" />
+            </intent-filter>
+
+        </activity-alias>
+
+        <activity-alias
+            android:name=".icons.Pride"
+            android:enabled="false"
+            android:exported="true"
+            android:icon="@drawable/ic_launcher_pride"
+            android:label="@string/app_name"
+            android:roundIcon="@drawable/ic_launcher_pride"
+            android:targetActivity=".MainActivity">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="logra.actions.EXPORT_LOGS" />
+                <category android:name="android.intent.category.OPENABLE" />
+            </intent-filter>
+            <intent-filter android:exported="false">
+                <action android:name="logra.actions.VIEW_CRASH" />
+                <category android:name="android.intent.category.OPENABLE" />
+            </intent-filter>
+
+        </activity-alias>
+
+        <service
+            android:name=".crashdetector.services.CrashDetectionService"
+            android:exported="false" />
+
+        <receiver
+            android:name=".crashdetector.receivers.CrashReceiver"
             android:exported="false">
             <intent-filter>
                 <action android:name="logra.actions.EXCEPTION" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".crashdetector.receivers.StopReceiver" android:exported="false" />
+        <receiver
+            android:name=".crashdetector.receivers.StopReceiver"
+            android:exported="false" />
         <receiver android:name=".crashdetector.receivers.BootReceiver" android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />

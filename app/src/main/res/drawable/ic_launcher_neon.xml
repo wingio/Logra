@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
+    <background android:drawable="@drawable/img_logra_neon_bg"/>
+    <foreground android:drawable="@drawable/img_logra_neon"/>
+    <monochrome android:drawable="@drawable/ic_logra" />
+</adaptive-icon>

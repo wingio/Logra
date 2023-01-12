@@ -19,8 +19,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
+import org.koin.androidx.compose.get
 import xyz.wingio.logra.BuildConfig
 import xyz.wingio.logra.R
+import xyz.wingio.logra.domain.manager.PreferenceManager
 import xyz.wingio.logra.ui.components.settings.SettingItem
 import xyz.wingio.logra.utils.Utils
 
@@ -31,9 +33,12 @@ class AboutScreen : Screen {
 
     @Composable
     @OptIn(ExperimentalMaterial3Api::class)
-    fun Screen() {
+    fun Screen(
+        prefs: PreferenceManager = get()
+    ) {
         val ctx = LocalContext.current
         val uriHandler = LocalUriHandler.current
+        var tappedCount = 0
 
         Scaffold(
             modifier = Modifier.fillMaxSize(),
@@ -52,8 +57,14 @@ class AboutScreen : Screen {
                     text = { Text(stringResource(R.string.version)) },
                     secondaryText = { Text("${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})") },
                     modifier = Modifier.clickable {
+                        tappedCount += 1
                         with(ctx) {
-                            Utils.showToast("No secrets here!")
+                            if (prefs.easterEggDiscovered)
+                                Utils.showToast("You already tried this! Go use your new icon")
+                            else if (tappedCount >= 10) {
+                                Utils.showToast("Fine, you caught me :(\nYou get a new app icon.")
+                                prefs.easterEggDiscovered = true
+                            } else Utils.showToast("No secrets here!")
                         }
                     }
                 )

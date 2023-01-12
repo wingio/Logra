@@ -49,4 +49,21 @@
     <string name="l_warn">Warning</string>
     <string name="l_error">Error</string>
     <string name="l_fatal">Fatal</string>
+
+    <string name="settings_app_icon">App Icon</string>
+    <string name="currently_used">Currently used</string>
+
+    <string name="icon_default_name">Default</string>
+    <string name="icon_default_description">The default icon used for Logra</string>
+    <string name="icon_legacy_name">Legacy</string>
+    <string name="icon_legacy_description">The first icon ever used</string>
+    <string name="icon_nord_name">Nord</string>
+    <string name="icon_nord_description">A little chilly up here</string>
+    <string name="icon_mocha_name">Mocha</string>
+    <string name="icon_mocha_description">Enjoy your catppuccino</string>
+    <string name="icon_neon_name">Neon</string>
+    <string name="icon_neon_description">Welcome to the night life</string>
+    <string name="icon_pride_name">Pride</string>
+    <string name="icon_pride_description">🏳️‍🌈</string>
+
 </resources>
