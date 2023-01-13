@@ -94,7 +94,7 @@ class ColorSettingsScreen : Screen {
 
         LargeTopAppBar(
             title = {
-                Text(text = "Colors")
+                Text(stringResource(R.string.settings_colors))
             },
             navigationIcon = {
                 IconButton(onClick = { navigator?.pop() }) {

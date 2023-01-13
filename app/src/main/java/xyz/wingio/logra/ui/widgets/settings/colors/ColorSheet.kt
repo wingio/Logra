@@ -14,8 +14,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.holix.android.bottomsheetdialog.compose.BottomSheetDialogProperties
+import xyz.wingio.logra.R
 import xyz.wingio.logra.domain.manager.Theme
 import xyz.wingio.logra.ui.components.BottomSheet
 import xyz.wingio.logra.ui.components.ThemeWrapper
@@ -54,7 +56,7 @@ fun ColorSheet(
         },
         properties = BottomSheetDialogProperties(navigationBarColor = MaterialTheme.colorScheme.surface),
         title = {
-            Text(text = "Edit Color")
+            Text(stringResource(R.string.edit_color))
         }
     ) {
         Column(
@@ -65,7 +67,7 @@ fun ColorSheet(
             ) {
                 Tab(
                     label = {
-                        Text(text = "Light")
+                        Text(stringResource(R.string.light))
                     },
                     selected = !darkTheme,
                     align = TabAlignment.START
@@ -74,7 +76,7 @@ fun ColorSheet(
                 }
                 Tab(
                     label = {
-                        Text(text = "Dark")
+                        Text(stringResource(R.string.dark))
                     },
                     selected = darkTheme,
                     align = TabAlignment.END
@@ -82,8 +84,6 @@ fun ColorSheet(
                     previewTheme = Theme.DARK
                 }
             }
-
-
 
             AnimatedContent(
                 targetState = previewTheme,

@@ -50,10 +50,10 @@ fun FilterRow(
                 onClick = {
                     filter.reset()
                 }
-            ) { Icon(imageVector = Icons.Filled.Refresh, contentDescription = "Reset") }
+            ) { Icon(imageVector = Icons.Filled.Refresh, contentDescription = stringResource(R.string.reset)) }
             IconButton(
                 onClick = { newFilterDDOpened = true }
-            ) { Icon(imageVector = Icons.Filled.Add, contentDescription = "New Filter") }
+            ) { Icon(imageVector = Icons.Filled.Add, contentDescription = stringResource(R.string.new_filter)) }
             NewFilterDropdown(expanded = newFilterDDOpened, filter) {
                 newFilterDDOpened = false
             }

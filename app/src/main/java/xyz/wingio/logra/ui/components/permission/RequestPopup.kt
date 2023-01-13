@@ -10,10 +10,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.*
 import androidx.compose.ui.text.font.FontFamily
 import kotlinx.coroutines.launch
 import xyz.wingio.logra.BuildConfig
+import xyz.wingio.logra.R
 import xyz.wingio.logra.utils.ShizukuRequestResult
 import xyz.wingio.logra.utils.Utils
 import xyz.wingio.logra.utils.checkShizukuPermission
@@ -28,6 +30,7 @@ fun RequestPopup(onDialogChange: (PopupState) -> Unit) {
 
     AlertDialog(
         text = {
+            // TODO: Add special localization for annotated strings
             val annotatedString = buildAnnotatedString {
                 withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.onBackground)) {
                     append(
@@ -89,7 +92,7 @@ fun RequestPopup(onDialogChange: (PopupState) -> Unit) {
                 },
                 content = {
                     Text(
-                        "Grant via root"
+                        stringResource(R.string.grant_via_root)
                     )
                 }
             )
@@ -111,7 +114,7 @@ fun RequestPopup(onDialogChange: (PopupState) -> Unit) {
                 },
                 content = {
                     Text(
-                        "Grant via shizuku"
+                        stringResource(R.string.grant_via_shizuku)
                     )
                 }
             )

@@ -56,26 +56,26 @@ class SettingsScreen : Screen {
                     .verticalScroll(rememberScrollState())
             ) {
 
-                SettingsHeader(text = "General")
+                SettingsHeader(stringResource(R.string.settings_general))
 
-                SettingsSwitch(label = "Line Wrap", pref = prefs.lineWrap) { prefs.lineWrap = it }
-                SettingsSwitch(label = "Compact Mode", pref = prefs.compact) { prefs.compact = it }
+                SettingsSwitch(label = stringResource(R.string.settings_line_wrap), pref = prefs.lineWrap) { prefs.lineWrap = it }
+                SettingsSwitch(label = stringResource(R.string.settings_compact_mode), pref = prefs.compact) { prefs.compact = it }
                 SettingsSwitch(
-                    label = "Dump logs at startup",
-                    secondaryLabel = "Improves startup time",
+                    label = stringResource(R.string.settings_dump_logs),
+                    secondaryLabel = stringResource(R.string.settings_dump_logs_subtext),
                     pref = prefs.dumpLogs
                 ) { prefs.dumpLogs = it }
 
-                SettingsHeader(text = "Theme")
+                SettingsHeader(stringResource(R.string.settings_appearance))
 
                 SettingsSwitch(
-                    label = "Dynamic Theming",
+                    label = stringResource(R.string.settings_monet),
                     pref = prefs.monet,
                     disabled = Build.VERSION.SDK_INT < Build.VERSION_CODES.S
                 ) { prefs.monet = it }
 
                 SettingsItemChoice(
-                    label = "Theme",
+                    label = stringResource(R.string.settings_theme),
                     pref = prefs.theme,
                     onPrefChange = { prefs.theme = it })
 
@@ -84,7 +84,7 @@ class SettingsScreen : Screen {
                         navigator?.push(ColorSettingsScreen())
                     },
                     text = {
-                        Text(text = "Colors")
+                        Text(text = stringResource(R.string.settings_colors))
                     }
                 ) {
                     Icon(Icons.Filled.ChevronRight, "")
@@ -101,10 +101,10 @@ class SettingsScreen : Screen {
                     Icon(Icons.Filled.ChevronRight, "")
                 }
 
-                SettingsHeader(text = "Advanced")
+                SettingsHeader(stringResource(R.string.settings_advanced))
 
                 SettingsTextField(
-                    label = "Timestamp Format",
+                    label = stringResource(R.string.settings_timestamp),
                     pref = prefs.timestampFormat,
                     onPrefChange = {
                         try {
@@ -168,7 +168,7 @@ class SettingsScreen : Screen {
         val navigator = LocalNavigator.current
 
         LargeTopAppBar(
-            title = { Text("Settings") },
+            title = { Text(stringResource(R.string.settings)) },
             scrollBehavior = scrollBehavior,
             actions = {
                 IconButton(onClick = { navigator?.push(AboutScreen()) }) {

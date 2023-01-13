@@ -6,7 +6,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.res.stringResource
 import kotlinx.coroutines.launch
+import xyz.wingio.logra.R
 import xyz.wingio.logra.utils.grantPermissionsWithShizuku
 
 @Composable
@@ -16,7 +18,7 @@ fun GrantAndClosePopup(onDialogChange: (PopupState) -> Unit) {
     AlertDialog(
         text = {
             Text(
-                text = "Once granted, the app will restart. Press the button below to grant the permission and restart the app.",
+                text = stringResource(R.string.confirm_grant_restart),
                 style = MaterialTheme.typography.bodyMedium
             )
         },
@@ -29,7 +31,7 @@ fun GrantAndClosePopup(onDialogChange: (PopupState) -> Unit) {
                 },
                 content = {
                     Text(
-                        text = "Grant and close"
+                        text = stringResource(R.string.grant_and_close)
                     )
                 }
             )

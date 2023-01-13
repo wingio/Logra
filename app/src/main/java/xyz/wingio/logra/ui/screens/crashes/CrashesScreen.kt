@@ -164,14 +164,14 @@ class CrashesScreen : Screen {
                                 color = MaterialTheme.colorScheme.onPrimary
                             )
                         ) {
-                            Text(text = "Crash Detector")
+                            Text(stringResource(R.string.crash_detector))
                         }
                         ProvideTextStyle(
                             MaterialTheme.typography.bodyMedium.copy(
                                 color = MaterialTheme.colorScheme.onPrimary.copy(0.6f)
                             )
                         ) {
-                            Text(text = "Disabling will close the app")
+                            Text(stringResource(R.string.crash_detector_disable_warning))
                         }
                     }
 

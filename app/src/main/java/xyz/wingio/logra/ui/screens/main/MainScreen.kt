@@ -150,7 +150,7 @@ class MainScreen : Screen {
             ) {
                 Icon(
                     imageVector = Icons.Filled.KeyboardArrowDown,
-                    contentDescription = "Jump to bottom"
+                    contentDescription = stringResource(R.string.jump_to_bottom)
                 )
             }
         }
@@ -192,11 +192,11 @@ class MainScreen : Screen {
                 // Pause/Unpause logs
                 IconButton(onClick = { viewModel.paused = !viewModel.paused }) {
                     if (viewModel.paused)
-                        Icon(Icons.Filled.PlayArrow, contentDescription = "Unpause logs")
+                        Icon(Icons.Filled.PlayArrow, contentDescription = stringResource(R.string.unpause_logs))
                     else
                         Icon(
                             painterResource(R.drawable.ic_pause_24),
-                            contentDescription = "Pause logs"
+                            contentDescription = stringResource(R.string.pause_logs)
                         )
                 }
 
@@ -219,7 +219,7 @@ class MainScreen : Screen {
 
                         // Clear logs
                         DropdownMenuItem(
-                            text = { Text(text = "Clear") },
+                            text = { Text(stringResource(R.string.clear)) },
                             onClick = {
                                 viewModel.logs.clear()
                                 viewModel.selectedLogs.clear()
@@ -229,7 +229,7 @@ class MainScreen : Screen {
 
                         //Save logs to file
                         DropdownMenuItem(
-                            text = { Text(text = stringResource(id = R.string.save)) },
+                            text = { Text(stringResource(R.string.save)) },
                             onClick = {
                                 ctx.saveText(
                                     viewModel.logs
@@ -250,7 +250,7 @@ class MainScreen : Screen {
 
                         // Go to settings
                         DropdownMenuItem(
-                            text = { Text(text = "Settings") },
+                            text = { Text(stringResource(R.string.settings)) },
                             onClick = { navigator?.push(SettingsScreen()); menuOpened = false }
                         )
                     }

@@ -9,6 +9,7 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.outlined.Feed
 import androidx.compose.material.icons.outlined.Help
+import androidx.compose.material.icons.outlined.HelpOutline
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -60,11 +61,11 @@ class AboutScreen : Screen {
                         tappedCount += 1
                         with(ctx) {
                             if (prefs.easterEggDiscovered)
-                                Utils.showToast("You already tried this! Go use your new icon")
+                                Utils.showToast(getString(R.string.easter_egg_found))
                             else if (tappedCount >= 10) {
-                                Utils.showToast("Fine, you caught me :(\nYou get a new app icon.")
+                                Utils.showToast(getString(R.string.easter_egg_discovered))
                                 prefs.easterEggDiscovered = true
-                            } else Utils.showToast("No secrets here!")
+                            } else Utils.showToast(getString(R.string.easter_egg_tease))
                         }
                     }
                 )
@@ -72,8 +73,8 @@ class AboutScreen : Screen {
                 SettingItem(
                     icon = {
                         Icon(
-                            Icons.Outlined.Help,
-                            contentDescription = ""
+                            Icons.Outlined.HelpOutline,
+                            contentDescription = null
                         )
                     },
                     text = { Text(stringResource(R.string.help)) },
