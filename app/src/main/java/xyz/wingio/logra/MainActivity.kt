@@ -1,6 +1,7 @@
 package xyz.wingio.logra
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -68,14 +69,19 @@ class MainActivity : ComponentActivity() {
                 }
 
                 Navigator(
-                    screen = if (showCrash)
-                        CrashDetailScreen(
-                            intent.getSerializableExtra(
-                                Intents.Extras.CRASH,
-                                Crash::class.java
-                            )!!
-                        )
-                    else MainScreen()
+                    screen = if (showCrash) {
+                        val crash =
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                                intent.getSerializableExtra(
+                                    Intents.Extras.CRASH,
+                                    Crash::class.java
+                                )!!
+                            } else {
+                                @Suppress("DEPRECATION")
+                                intent.getSerializableExtra(Intents.Extras.CRASH) as Crash
+                            }
+                        CrashDetailScreen(crash)
+                    } else MainScreen()
                 ) {
                     SlideTransition(it)
                 }
