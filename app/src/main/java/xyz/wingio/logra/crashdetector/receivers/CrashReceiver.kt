@@ -13,6 +13,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import xyz.wingio.logra.BuildConfig
 import xyz.wingio.logra.MainActivity
 import xyz.wingio.logra.R
 import xyz.wingio.logra.crashdetector.db.CrashesDatabase
@@ -59,10 +60,15 @@ class CrashReceiver : BroadcastReceiver(), KoinComponent {
 
         val notificationId = (time - BOOT_TIME).toInt()
 
+        val mainActivity = context.packageManager
+            .getLaunchIntentForPackage(BuildConfig.APPLICATION_ID)!!
+            .resolveActivity(context.packageManager)
+
         val clickIntent = PendingIntent.getActivity(
             context,
             notificationId,
-            Intent(context, MainActivity::class.java).apply {
+            Intent().apply {
+                setClassName(mainActivity.packageName, mainActivity.className)
                 putExtra(Intents.Extras.CRASH, crash)
                 action = Intents.Actions.VIEW_CRASH
                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)

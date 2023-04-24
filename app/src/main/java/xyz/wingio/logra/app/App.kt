@@ -43,7 +43,7 @@ class App : Application() {
         NotificationChannel(
             Channels.CRASH_DETECTOR,
             "Crash Detector",
-            NotificationManager.IMPORTANCE_DEFAULT
+            NotificationManager.IMPORTANCE_HIGH
         ).apply {
             description = "Listens for any app crashes and gives you the stacktrace"
             nm.createNotificationChannel(this)
