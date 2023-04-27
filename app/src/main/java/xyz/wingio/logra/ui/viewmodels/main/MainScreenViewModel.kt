@@ -5,14 +5,28 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import cafe.adriel.voyager.core.model.ScreenModel
+import cafe.adriel.voyager.core.model.coroutineScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.getAndUpdate
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import xyz.wingio.logra.domain.logcat.LogcatEntry
 import xyz.wingio.logra.domain.logcat.filter.Filter
 import xyz.wingio.logra.domain.manager.PreferenceManager
 import xyz.wingio.logra.utils.Utils.matches
-import xyz.wingio.logra.utils.logcat.LogcatManager
+import xyz.wingio.logra.domain.manager.LogcatManager
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class MainScreenViewModel(
-    val prefs: PreferenceManager
+    val prefs: PreferenceManager,
+    val logcatManager: LogcatManager
 ) : ScreenModel {
 
     var paused by mutableStateOf(false)
@@ -21,38 +35,22 @@ class MainScreenViewModel(
     var searchByOpen by mutableStateOf(false)
     val selectedLogs = mutableStateListOf<LogcatEntry>()
     var filter by mutableStateOf(Filter())
-    var logs = mutableStateListOf<LogcatEntry>()
-
-    private val pausedLogs = mutableListOf<LogcatEntry>()
+    val logs = MutableStateFlow(emptyList<LogcatEntry>())
 
     init {
-        LogcatManager.listen {
-            if (paused)
-                pausedLogs.add(it)
-            else {
-                addLogs(pausedLogs)
-                pausedLogs.clear()
-                addLog(it)
-            }
-        }
+        logcatManager.connect()
+        logcatManager.listen()
     }
 
-    private fun addLog(entry: LogcatEntry) {
-        if (logs.size > 10000) {
-            logs.removeFirst()
-        }
-        logs.add(entry)
-    }
+//    fun filterLogs(): MutableStateFlow<List<LogcatEntry>> {
+//        return LogcatManager.logs.matches(filter)
+//    }
 
-    private fun addLogs(entries: List<LogcatEntry>) {
-        entries.forEach {
-            addLog(it)
-        }
-    }
+    fun stop() = logcatManager.stop()
 
-    fun filterLogs(): List<LogcatEntry> {
-        return logs.matches(filter)
-    }
+    fun start() = logcatManager.listen()
+
+    fun clear() = logcatManager.clear()
 
     fun searchByText() {
         filter.text = selectedLogs.firstOrNull()?.content ?: ""

@@ -29,8 +29,10 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import xyz.wingio.logra.R
+import xyz.wingio.logra.domain.manager.LogcatManager
 import xyz.wingio.logra.ui.components.filter.FilterRow
 import xyz.wingio.logra.ui.components.filter.RoundedTextBox
 import xyz.wingio.logra.ui.screens.crashes.CrashesScreen
@@ -39,6 +41,7 @@ import xyz.wingio.logra.ui.theme.logLineAlt
 import xyz.wingio.logra.ui.viewmodels.main.MainScreenViewModel
 import xyz.wingio.logra.ui.widgets.logs.LogEntry
 import xyz.wingio.logra.ui.widgets.selection.SelectionPopup
+import xyz.wingio.logra.utils.Utils.matches
 import xyz.wingio.logra.utils.Utils.saveText
 import java.text.SimpleDateFormat
 import java.util.*
@@ -54,9 +57,10 @@ class MainScreen : Screen {
         viewModel: MainScreenViewModel = getScreenModel()
     ) {
         val listState = rememberLazyListState()
+        val _logs by viewModel.logcatManager.logs.collectAsState()
         val logs by remember {
             derivedStateOf {
-                viewModel.filterLogs()
+                _logs.matches(viewModel.filter)
             }
         }
 
@@ -190,7 +194,10 @@ class MainScreen : Screen {
                 }
 
                 // Pause/Unpause logs
-                IconButton(onClick = { viewModel.paused = !viewModel.paused }) {
+                IconButton(onClick = {
+                    viewModel.paused = !viewModel.paused
+                    if(viewModel.paused) viewModel.stop() else viewModel.start()
+                }) {
                     if (viewModel.paused)
                         Icon(Icons.Filled.PlayArrow, contentDescription = stringResource(R.string.unpause_logs))
                     else
@@ -221,7 +228,7 @@ class MainScreen : Screen {
                         DropdownMenuItem(
                             text = { Text(stringResource(R.string.clear)) },
                             onClick = {
-                                viewModel.logs.clear()
+                                viewModel.clear()
                                 viewModel.selectedLogs.clear()
                                 menuOpened = false
                             }
@@ -232,7 +239,9 @@ class MainScreen : Screen {
                             text = { Text(stringResource(R.string.save)) },
                             onClick = {
                                 ctx.saveText(
-                                    viewModel.logs
+                                    viewModel.logcatManager
+                                        .logs
+                                        .value
                                         .sortedBy { it.createdAt }
                                         .joinToString("\n") {
                                             it.raw

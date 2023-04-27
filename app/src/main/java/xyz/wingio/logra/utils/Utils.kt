@@ -9,6 +9,12 @@ import android.os.Handler
 import android.os.Looper
 import android.widget.Toast
 import androidx.compose.ui.graphics.Color
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.withContext
 import xyz.wingio.logra.BuildConfig
 import xyz.wingio.logra.domain.logcat.LogcatEntry
 import xyz.wingio.logra.domain.logcat.filter.Filter
@@ -30,6 +36,8 @@ object Utils {
     fun List<LogcatEntry>.matches(filter: Filter) = filter {
         it.matches(filter)
     }
+
+    fun MutableStateFlow<List<LogcatEntry>>.matches(filter: Filter) = MutableStateFlow(this@matches.value.matches(filter))
 
     fun LogcatEntry.matches(filter: Filter): Boolean {
         val textMatches = filter.text.isBlank() || content.contains(filter.text)
@@ -93,4 +101,8 @@ object Utils {
             val b: Int = (blue * 255).toInt()
             return java.lang.String.format(Locale.getDefault(), "%02X%02X%02X%02X", a, r, g, b)
         }
+
+    fun <T> MutableStateFlow<List<T>>.updateList(block: MutableList<T>.() -> Unit) = update {
+        it.toMutableList().apply { block(this) }
+    }
 }

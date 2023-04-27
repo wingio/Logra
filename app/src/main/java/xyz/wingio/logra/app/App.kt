@@ -5,6 +5,7 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Looper
+import kotlinx.coroutines.MainScope
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import xyz.wingio.logra.di.databaseModule
@@ -65,6 +66,10 @@ class App : Application() {
             Logger.default.error("Error on thread ${thread.name}", throwable)
             if (thread == Looper.getMainLooper().thread) exitProcess(1)
         }
+    }
+
+    companion object {
+        val applicationScope = MainScope()
     }
 
 }

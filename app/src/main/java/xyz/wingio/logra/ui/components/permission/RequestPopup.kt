@@ -14,19 +14,21 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.*
 import androidx.compose.ui.text.font.FontFamily
 import kotlinx.coroutines.launch
+import org.koin.androidx.compose.get
 import xyz.wingio.logra.BuildConfig
 import xyz.wingio.logra.R
 import xyz.wingio.logra.utils.ShizukuRequestResult
 import xyz.wingio.logra.utils.Utils
 import xyz.wingio.logra.utils.checkShizukuPermission
 import xyz.wingio.logra.utils.grantPermissionsWithRoot
-import xyz.wingio.logra.utils.logcat.LogcatManager
+import xyz.wingio.logra.domain.manager.LogcatManager
 
 @OptIn(ExperimentalTextApi::class)
 @Composable
 fun RequestPopup(onDialogChange: (PopupState) -> Unit) {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
+    val logcatManager: LogcatManager = get()
 
     AlertDialog(
         text = {
@@ -85,7 +87,8 @@ fun RequestPopup(onDialogChange: (PopupState) -> Unit) {
                     // Root
                     coroutineScope.launch {
                         grantPermissionsWithRoot().also {
-                            LogcatManager.connect()
+                            logcatManager.clear()
+                            logcatManager.listen()
                             onDialogChange(PopupState.NONE)
                         }
                     }

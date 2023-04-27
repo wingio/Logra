@@ -29,20 +29,20 @@ import xyz.wingio.logra.utils.Utils
 import xyz.wingio.logra.utils.Utils.saveText
 import xyz.wingio.logra.utils.hasLogsPermission
 import xyz.wingio.logra.utils.initCrashService
-import xyz.wingio.logra.utils.logcat.LogcatManager
+import xyz.wingio.logra.domain.manager.LogcatManager
 import java.text.SimpleDateFormat
 import java.util.*
 
 class MainActivity : ComponentActivity() {
 
     val prefs: PreferenceManager by inject()
+    private val logcatManager: LogcatManager by inject()
 
     @OptIn(ExperimentalAnimationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         installSplashScreen()
 
-        LogcatManager.connect()
         val showCrash =
             intent.action == Intents.Actions.VIEW_CRASH && intent.hasExtra(Intents.Extras.CRASH)
         if (prefs.crashDetectorEnabled) initCrashService()
@@ -94,6 +94,7 @@ class MainActivity : ComponentActivity() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == RESULT_OK && data != null) {
             if (requestCode == 1) {
                 try {
@@ -118,7 +119,7 @@ class MainActivity : ComponentActivity() {
             if(it.action == "logra.actions.EXPORT_LOGS") {
                 val pid = it.extras?.getInt("logra.extras.PID") ?: return
                 CoroutineScope(Dispatchers.IO).launch {
-                    LogcatManager.getLogsFromPid(pid).also { logs ->
+                    logcatManager.getLogsFromPid(pid).also { logs ->
                         saveText(
                             logs
                                 .sortedBy { log -> log.createdAt }

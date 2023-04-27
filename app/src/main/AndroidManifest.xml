@@ -17,7 +17,8 @@
         android:name=".app.App"
         android:roundIcon="@drawable/ic_launcher"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Logra">
+        android:theme="@style/Theme.Logra"
+        android:largeHeap="true">
         <activity
             android:name=".MainActivity"
             android:exported="true"
